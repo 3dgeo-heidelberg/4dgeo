@@ -50,7 +50,6 @@ function LandingPage() {
         'Accept': 'application/json'
        }
     })).json();
-    console.log("json", Array.from(json.example_dashboards));
     setExampleDashboards(json.example_dashboards);
   }
 
@@ -58,7 +57,6 @@ function LandingPage() {
     setHtmlHeaderString(await (await fetch(`custom/custom_html/landing_page_header.html`)).text());
   }
   useEffect(() => {
-    console.log("fetching");
     fetchHtml();
     fetchExampleDashboards();
   }, []);
@@ -77,7 +75,6 @@ function LandingPage() {
 
         <div className="template-container">
           {Array.from(exampleDashboards).map((example) => {
-            console.log("HERE");
             return (
             <div
               key={example.title}
