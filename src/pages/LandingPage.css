@@ -1,0 +1,241 @@
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* Template Section Styles */
+.template-section {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  .template-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.template-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card-wrap {
+  /* flex: 1 1 300px; */
+  max-width: 400px;
+  min-width: 280px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.card-wrap:hover {
+  transform: translateY(-5px);
+}
+
+.card {
+  position: relative;
+  height: 400px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  background-size: cover;
+  background-position: center;
+}
+
+.card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: white;
+}
+
+.card-info h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-info p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.title {
+  font-size: 2.5rem !important;
+  color: #333 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: #666 !important;
+  font-weight: 400 !important;
+  margin-bottom: 3rem !important;
+}
+
+/* Module Selection Styles */
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.dashboard-creation {
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.landing-container.hidden {
+  display: none;
+}
+
+.landing-container.visible {
+  display: flex;
+}
+
+.landing-paper {
+  padding: 2rem !important;
+  width: 100%;
+  max-width: 600px !important;
+  margin: 2rem auto !important;
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 
+              0px 5px 8px 0px rgba(0,0,0,0.14), 
+              0px 1px 14px 0px rgba(0,0,0,0.12) !important;
+}
+
+.select-modules-heading {
+  font-size: 1.5rem !important;
+  text-align: center !important;
+  margin-bottom: 1.5rem !important;
+  color: #333 !important;
+}
+
+.modules-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+.module-item {
+  width: 100%;
+  padding: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.module-item:hover {
+  background-color: rgba(25, 118, 210, 0.05);
+}
+
+.button-container {
+  margin-top: 2rem !important;
+  text-align: center !important;
+}
+
+.go-button {
+  padding: 12px 40px !important;
+  font-size: 1.1rem !important;
+  font-weight: bold !important;
+  text-transform: none !important;
+  transition: transform 0.2s ease !important;
+}
+
+.go-button:hover {
+  transform: scale(1.05);
+}
+
+.note-text {
+  text-align: center !important;
+  color: #666 !important;
+  font-style: italic !important;
+  margin-top: 1.5rem !important;
+  font-size: 0.875rem !important;
+}
+
+/* Checkbox Styling */
+.MuiCheckbox-root {
+  color: #1976d2 !important;
+}
+
+.Mui-checked {
+  color: #1976d2 !important;
+}
+
+.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .template-section {
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: 2rem !important;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem !important;
+  }
+  
+  .card {
+    height: 300px;
+  }
+  
+  .card-info h1 {
+    font-size: 1.2rem;
+  }
+  
+  .card-info p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-paper {
+    padding: 1rem !important;
+  }
+  
+  .select-modules-heading {
+    font-size: 1.2rem !important;
+  }
+  
+  .go-button {
+    width: 100%;
+    padding: 10px !important;
+  }
+}
+
+.permalink-button {
+  background: linear-gradient(45deg, #1976d2 30%, #0d47a1 90%) !important;
+  color: white !important;
+  padding: 12px 30px !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.5px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.permalink-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 5px 2px rgba(25, 118, 210, 0.3) !important;
+}

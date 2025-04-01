@@ -1,0 +1,48 @@
+{
+  "example_dashboards": [
+    {
+      "title": "Rockfall Monitoring",
+      "image": "https://static.vecteezy.com/system/resources/previews/019/192/892/original/mountains-rockfall-icon-color-outline-vector.jpg",
+      "layout": [
+        {
+          "x":0,
+          "y":0,
+          "w":3,
+          "h":1,
+          "i":"Calendar"
+        },
+        {
+          "x":4,
+          "y":0,
+          "w":6,
+          "h":3,
+          "i":"View2D"
+        }
+      ],
+      "url": "",
+      "interval": 60
+    },
+    {
+      "title": "Bee Monitoring",
+      "image": "https://th.bing.com/th/id/OIP.dT-tydVwio1-xF_L3MLn7QHaHa?w=165&h=180&c=7&r=0&o=5&pid=1.7",
+      "layout": [
+        {
+          "x":0,
+          "y":0,
+          "w":3,
+          "h":1,
+          "i":"Calendar"
+        },
+        {
+          "x":4,
+          "y":0,
+          "w":6,
+          "h":3,
+          "i":"View2D"
+        }
+      ],
+      "url": "./testing_data/bee_monitoring_hd/sample_bees.json",
+      "interval": 6
+    }
+  ]
+}
