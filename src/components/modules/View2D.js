@@ -14,12 +14,6 @@ export default function View2D({
         if(imgData) {
             setBackgroundImageData(imgData.backgroundImageData);
         }
-        // img.onload = () => {
-        //     console.log("image size", img.width, img.height)
-        //     setImageSize({ width: img.width, height: img.height });
-        // };
-        // img.src = imgUrl;
-
     }, [observations]);
 
     
