@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+# 4dGeo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+4dGeo is a modular web-based dashboard application for visualizing geospatial data over time. Built with React, it enables users to interact with and analyze 4D geodata (spatial and temporal) using various visualization modules. The project is designed to be flexible and extendable, making it easy to adapt for different use cases such as landslide detection, insect monitoring, and other environmental observations.
 
-## Available Scripts
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Modular Design** - Easily add and customize visualization modules.
+- **Customizable Layout** - Configure the dashboard according to specific project needs.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Data Model
 
-### `npm test`
+4dGeo utilizes a structured data model to visualize geospatial and temporal data. The model is designed around observations, where each observation represents a snapshot of an area with detected geoobjects and their properties at a specific point in time.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### JSON Structure
+```
+{
+    "observations": [
+        {
+            "startDateTime": "String in ISO 8601 format",
+            "endDateTime": "String in ISO 8601 format",
+            "geoObjects": [
+                {
+                    "id": "",
+                    "type": "",
+                    "dateTime": "String in ISO 8601 format",
+                    "geometry": {
+                        "type": "",
+                        "coordinates": [
+                            [1, 1, 1],
+                            [1, 2, 1]
+                        ]
+                    },
+                    "customEntityData": {
+                        "customKey": "",
+                        "customKey2": ""
+                    }
+                }
+            ],
+            "backgroundImageData": {
+                "url": "",
+                "height": 0,
+                "width": 0
+            }        
+        }
+    ]
+}
+```
 
-### `npm run build`
+### Explanation
+- **Observations** - A list where each element represents a singular observation.
+- **startDateTime & endDateTime** - The time range of the observation.
+- **geoObjects** - A list for every Object inside each observation.
+    - **type** - Custom Type for your use case.
+    - **datetime** - specific point in time, inside the defined time range.
+    - **geometry** - Geometrydata for visualising with the 2D View Module.
+        - **type** - Type of geometry, like Point and Polygon.
+        - **coordinates** - The Coordinates of an Object in reference to the background image.
+- **backgroundImageData** - Image source for the background Image of the 2D View Module.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run 4dGeo locally, follow these steps:
 
-### `npm run eject`
+1. Clone the repository:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```sh
+   git clone https://github.com/yourusername/4dGeo.git
+   cd 4dGeo
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Install dependencies:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```sh
+   npm install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. Start the development server:
 
-## Learn More
+   ```sh
+   npm start
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Open your browser and navigate to:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```
+   http://localhost:3000
+   ```
 
-### Code Splitting
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+For using this Web-Application, there are two options:
 
-### Analyzing the Bundle Size
+- Use the standard app with all its functionalities via the Github Pages URL
+- Fork this repository and customize contents and features to you liking. Inside the ```/public``` folder are some configurations and html files for easy accessibility. After customizing, you can easily host your own Github Pages with your repo and your changes are live at your own URL!
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Contributions are welcome! If you have suggestions or feature requests, feel free to open an issue.
