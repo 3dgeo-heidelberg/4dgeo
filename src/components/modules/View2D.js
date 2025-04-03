@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, ImageOverlay, GeoJSON, LayersControl, Polygon, Rectangle, Circle, CircleMarker, LayerGroup, Tooltip } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
 import L from "leaflet"; // Import Leaflet library to access its utility methods
 import "leaflet/dist/leaflet.css"; // Import Leaflet's CSS for map styling
+import { red } from "@mui/material/colors";
 
 export default function View2D({ 
     observations,
@@ -16,48 +17,30 @@ export default function View2D({
         }
     }, [observations]);
 
-    
-
-    // Define the style for GeoJSON features based on event type
-    const eventStyle = (event) => {
-        const eventType = event.type;
-        const color = typeColors[eventType] || typeColors.undefined; // Use the color for the event type or a default
-        return {
-            color: color, // Line color
-            weight: 2, // Line thickness
-            opacity: 1, // Line opacity
-            fillOpacity: 0.5, // Fill opacity
-        };
-    };
-
-    // Define behavior for each GeoJSON feature, including popup content
-    const onEachFeature = (feature, layer) => {
-        let popupContent = ''
-
-        for (const [key, value] of Object.entries(feature.properties)) {
-            popupContent += `<strong>${key}:</strong> ${value}<br/>`
-        }
-
-        layer.bindPopup(popupContent); // Bind the popup to the layer
-    };
-
-
-
     const getEventGeometries = () => {
         return Array.from(observations).map((observation, i) => Array.from(observation.geoObjects).map((geoObject, j) => {
             switch(geoObject.geometry.type) {
                 case 'Polygon':
                     return (
                         <Polygon
-                            key={`${i}-${j}`}
+                            key={`${i}-${j}`} 
                             pathOptions={{ 
-                                color: typeColors.get(geoObject.type),
-                                weight: 2, // Line thickness
-                                opacity: 1, // Line opacity
-                                fillOpacity: 0.5, // Fill opacity
+                                color: 'purple',
+                                weight: 2,
+                                opacity: 1,
+                                fillOpacity: 0.65
                             }}
                             positions={geoObject.geometry.coordinates}
-                        />
+                        >
+                            <Tooltip>
+                                <b>Type:</b> {geoObject.type}
+                                {Object.entries(geoObject.customEntityData).map((item, i) => {
+                                    return (
+                                        <div key={i}><b>{item[0]}:</b> {item[1]}</div>
+                                    )
+                                })}
+                            </Tooltip>
+                        </Polygon>              
                     );
                 case 'Point':
                     return (
@@ -92,25 +75,6 @@ export default function View2D({
                     );
             }
         }));
-    }
-
-    // Define the style for GeoJSON features based on event type
-    const geoJsonStyle = (geoJsonObject) => {
-        const type = geoJsonObject.type; // Get the event type from feature properties
-        const color = typeColors[type] || typeColors.undefined; // Use the color for the event type or a default
-        return {
-            color: color, // Line color
-            weight: 2, // Line thickness
-            opacity: 1, // Line opacity
-            fillOpacity: 0.5, // Fill opacity
-        };
-    };
-
-    // Define options for the GeoJSON layer, including style and behavior
-    const geoJsonOptions = {
-        crs: L.CRS.Simple, // Use a simple CRS for pixel-based coordinates
-        style: geoJsonStyle, // Apply the style function
-        onEachFeature: onEachFeature, // Apply the behavior function
     };
 
     return backgroundImageData ? (
@@ -127,8 +91,8 @@ export default function View2D({
                     <ImageOverlay
                         url={backgroundImageData.url}
                         bounds={
-                            [[(-backgroundImageData.height) / 2, (-backgroundImageData.width) / 2], // Bottom-left corner
-                            [backgroundImageData.height/2, backgroundImageData.width / 2]] // Top-right corner
+                            [[(-backgroundImageData.height), 0],
+                            [0, backgroundImageData.width]]
                         }
                         opacity={0.9}
                     />

@@ -1,4 +1,4 @@
-import { useLocation, useResolvedPath, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Dashboard from "../components/dashboard/Dashboard";
 import { useState, useEffect } from "react";
 import Box from '@mui/material/Box';
@@ -29,7 +29,7 @@ function DashboardPage() {
         const intervalResolution = urlParams.get('interval') == null ? 6 : urlParams.get('interval');
         const interval = setInterval(() => {
             loadData();
-            console.log("Event ausgelöst!");
+            console.log("Reloading data!");
         }, Number.parseInt(intervalResolution)*1000);
 
         return () => clearInterval(interval); // Cleanup

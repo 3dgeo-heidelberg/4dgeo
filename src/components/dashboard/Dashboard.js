@@ -11,7 +11,7 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 function Dashboard({ layout, observations }) {
     
     //State Management
-    const [dateRange, setDateRange] = useState({ startDate: new Date("2024-09-16T14:54:00Z"), endDate: new Date("2024-09-16T15:37:26Z")});
+    const [dateRange, setDateRange] = useState({ startDate: Date.parse("0"), endDate: Date.now()});
     const [filteredObservations, setFilteredObservations] = useState(observations)
     const [typeColors, setTypeColors] = useState(new Map())
 
@@ -36,7 +36,7 @@ function Dashboard({ layout, observations }) {
             setFilteredObservations(observations)
         } else {
             setFilteredObservations(Array.from(observations).filter((observation) => {
-                return (Date.parse(observation.startDateTime) >= dateRange.startDate.getTime() && Date.parse(observation.startDateTime) <= dateRange.endDate.getTime())
+                return (Date.parse(observation.startDateTime) >= dateRange.startDate && Date.parse(observation.startDateTime) <= dateRange.endDate)
             }));
         }
     }, [observations, dateRange])

@@ -19,7 +19,7 @@
           "i":"View2D"
         }
       ],
-      "url": "",
+      "url": "./testing_data/rockfall_monitoring_trier/sample_rockfall_monitoring_trier.json",
       "interval": 60
     },
     {

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
-import { Button, Checkbox, FormControlLabel, Paper, Grid, Box, Typography, Snackbar } from '@mui/material';
+import { useNavigate, createSearchParams } from 'react-router-dom';
+import { Typography, Snackbar } from '@mui/material';
 import './LandingPage.css';
 import DashboardCreation from '../components/dashboard-creation/DashboardCreation';
 
@@ -44,7 +44,7 @@ function LandingPage() {
   }
 
   async function fetchExampleDashboards() {
-    const json = await (await fetch(`custom/example_dashboards/example_dashboards.json`, {
+    const json = await (await fetch(`4dgeo/custom/example_dashboards/example_dashboards.json`, {
       headers : { 
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -54,7 +54,7 @@ function LandingPage() {
   }
 
   async function fetchHtml() {
-    setHtmlHeaderString(await (await fetch(`custom/custom_html/landing_page_header.html`)).text());
+    setHtmlHeaderString(await (await fetch(`4dgeo/custom/custom_html/landing_page_header.html`)).text());
   }
   useEffect(() => {
     fetchHtml();

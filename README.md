@@ -56,7 +56,7 @@
     - **datetime** - specific point in time, inside the defined time range.
     - **geometry** - Geometrydata for visualising with the 2D View Module.
         - **type** - Type of geometry, like Point and Polygon.
-        - **coordinates** - The Coordinates of an Object in reference to the background image.
+        - **coordinates** - The Coordinates of an Object in reference to the background image. The origin is in the top-left hand corner of the image with the x-values going vertically and the y-values going horizontally.
 - **backgroundImageData** - Image source for the background Image of the 2D View Module.
 
 
