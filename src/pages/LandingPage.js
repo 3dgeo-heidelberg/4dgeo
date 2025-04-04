@@ -44,7 +44,7 @@ function LandingPage() {
   }
 
   async function fetchExampleDashboards() {
-    const json = await (await fetch(`4dgeo/custom/example_dashboards/example_dashboards.json`, {
+    const json = await (await fetch(`${window.location.href}/custom/example_dashboards/example_dashboards.json`, {
       headers : { 
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -54,7 +54,7 @@ function LandingPage() {
   }
 
   async function fetchHtml() {
-    setHtmlHeaderString(await (await fetch(`4dgeo/custom/custom_html/landing_page_header.html`)).text());
+    setHtmlHeaderString(await (await fetch(`${window.location.href}/custom/custom_html/landing_page_header.html`)).text());
   }
   useEffect(() => {
     fetchHtml();
