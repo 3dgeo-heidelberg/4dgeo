@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { MapContainer, ImageOverlay, GeoJSON, LayersControl, Polygon, Rectangle, Circle, CircleMarker, LayerGroup, Tooltip } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
+import { MapContainer, ImageOverlay, LayersControl, Polygon, Rectangle, Circle, LayerGroup, Tooltip } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
 import L from "leaflet"; // Import Leaflet library to access its utility methods
 import "leaflet/dist/leaflet.css"; // Import Leaflet's CSS for map styling
-import { red } from "@mui/material/colors";
 
 export default function View2D({ 
     observations,
@@ -73,6 +72,8 @@ export default function View2D({
                             positions={geoObject.geometry.coordinates}
                         />
                     );
+                default:
+                    return "";
             }
         }));
     };

@@ -32,7 +32,7 @@ function Dashboard({ layout, observations }) {
     }, [filteredObservations])
 
     useEffect(() => {
-        if (typeof dateRange == undefined || typeof dateRange == null) {
+        if (!dateRange) {
             setFilteredObservations(observations)
         } else {
             setFilteredObservations(Array.from(observations).filter((observation) => {
@@ -120,6 +120,8 @@ function Dashboard({ layout, observations }) {
                             />
                         </div>
                     );
+                default:
+                    return (<div>Not a supported module name</div>);
             }
         })
     }

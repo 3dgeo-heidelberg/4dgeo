@@ -30,7 +30,7 @@ function DashboardCreation() {
     };
 
     const addModuleToLayout = (moduleName) => {
-        if (moduleName == "2D View") {
+        if (moduleName === "2D View") {
             moduleName = "View2D";
         }
         setLayout(layout.concat({

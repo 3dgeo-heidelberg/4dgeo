@@ -15,13 +15,6 @@ function LandingPage() {
   const [copyStatus, setCopyStatus] = useState('');
   const modulesRef = useRef(null);
 
-  const modules = [
-    { id: 'Calendar', label: 'Calendar', minLayoutSize: {w: 3, h: 1} },
-    { id: 'Graph', label: 'Graph', minLayoutSize: {w: 2, h: 2} },
-    { id: 'Legend', label: 'Legend', minLayoutSize: {w: 2, h: 2} },
-    { id: 'MapView', label: 'Map View', minLayoutSize: {w: 6, h: 3} },
-  ];
-
   const handleCardSelection = (example) => {
     navigate({
       pathname: "/dashboard",

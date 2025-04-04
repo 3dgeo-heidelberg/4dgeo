@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { fetchJsonData } from "../utils/http_fetcher";
 
 function DashboardPage() {
-    const [urlParams, setUrlParams] = useSearchParams()
+    const urlParams = useSearchParams()[0]
     const [observations, setObservations] = useState([])
 
     const [htmlHeaderString, setHtmlHeaderString] = useState();
@@ -33,7 +33,7 @@ function DashboardPage() {
         }, Number.parseInt(intervalResolution)*1000);
 
         return () => clearInterval(interval); // Cleanup
-    }, []);
+    }, [urlParams]);
 
     return (
         <Box sx={{ height: '100vh', padding: 2, display: 'flex', flexDirection: 'column' }}>

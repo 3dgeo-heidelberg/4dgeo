@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import _ from "lodash";
+import React from "react";
 import "./DashboardPreview.css";
 
 import { Responsive, WidthProvider } from "react-grid-layout";
@@ -8,7 +7,7 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 
 function DashboardPreview({ layout, onLayoutChange }) {
     const generateDOM = () => {
-        return Array.from(layout).map((layoutItem, id) => {
+        return Array.from(layout).map((layoutItem) => {
             return (
                 <div
                     className={`reactGridItem ${layoutItem["i"].toString()}`}
