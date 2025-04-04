@@ -29,11 +29,8 @@ jobs:
       - name: Build React App
         run: npm run build
 
-      - name: Set Bot Auth
-        run: git config user.name 'github-actions[bot]' && git config user.email 'github-actions[bot]@users.noreply.github.com'
-
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        run: npm run deploy
+        run: npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
