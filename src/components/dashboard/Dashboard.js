@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Graph from "../modules/Graph";
-import Calendar from "../modules/Calendar";
+import Calendar2 from "../modules/Calendar2";
 import MapView from "../modules/View2D";
 import "./Dashboard.css";
 
@@ -65,9 +65,9 @@ function Dashboard({ layout, observations }) {
                                 static: true
                             }}
                         >
-                            <Calendar
+                            <Calendar2
                                 className="bg-white h-full border border-amber-700 shadow-md w-full"
-                                observations={filteredObservations}
+                                dateTimes={Array.from(new Set(Array.from(observations).map(observation => Date.parse(observation.startDateTime))))}
                                 onDateRangeChange={handleDateRangeChange}
                             />
                         </div>
