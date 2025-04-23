@@ -1,7 +1,0 @@
-.calendar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 0.5rem;
-  }

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Graph from "../modules/Graph";
-import Calendar2 from "../modules/Calendar2";
 import MapView from "../modules/View2D";
 import "./Dashboard.css";
+import { addDays } from 'date-fns';
 
 import { Responsive, WidthProvider } from "react-grid-layout";
+import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 function Dashboard({ layout, observations }) {
     
     //State Management
-    const [dateRange, setDateRange] = useState({ startDate: Date.parse("0"), endDate: Date.now()});
+    const [dateRange, setDateRange] = useState({ startDate: 0, endDate: Date.now()});
     const [filteredObservations, setFilteredObservations] = useState(observations)
     const [typeColors, setTypeColors] = useState(new Map())
 
@@ -32,24 +33,36 @@ function Dashboard({ layout, observations }) {
     }, [filteredObservations])
 
     useEffect(() => {
-        if (!dateRange) {
-            setFilteredObservations(observations)
-        } else {
-            setFilteredObservations(Array.from(observations).filter((observation) => {
-                return (Date.parse(observation.startDateTime) >= dateRange.startDate && Date.parse(observation.startDateTime) <= dateRange.endDate)
-            }));
-        }
-    }, [observations, dateRange])
+        setFilteredObservations(Array.from(observations).filter((observation) => {
+            let result = (Date.parse(observation.startDateTime) >= dateRange.startDate && Date.parse(observation.startDateTime) <= (addDays(dateRange.endDate, 1) - 1));
+            console.log("filtered", dateRange, Date.parse(observation.startDateTime))
+            return result;
+        }));
+    }, [dateRange])
 
-    const handleDateRangeChange = (fromDate, toDate) => {
-        setDateRange({ startDate: fromDate, endDate: toDate });
-    };
+    useEffect(() => {
+        setFilteredObservations(observations)
+
+        const allDates = new Set(Array.from(observations).map(observation => new Date(observation.startDateTime)))
+        if(allDates.size == 0) {
+            setDateRange({
+                startDate: 0,
+                endDate: Date.now()
+            })
+        } else {
+            setDateRange({
+                startDate: Math.min(...(Array.from(allDates))),
+                endDate: Math.max(...(Array.from(allDates)))
+            })
+        }
+        
+    }, [observations])
 
     const generateDOM = () => {
         return Array.from(layout).map((layoutItem, i) => {
             const moduleName = layoutItem["i"].split("_")[0]
             switch(moduleName) {
-                case 'Calendar':
+                case 'DateRangePicker':
                     return (
                         <div
                             className="reactGridItem"
@@ -65,13 +78,19 @@ function Dashboard({ layout, observations }) {
                                 static: true
                             }}
                         >
-                            <Calendar2
-                                className="bg-white h-full border border-amber-700 shadow-md w-full"
-                                dateTimes={Array.from(new Set(Array.from(observations).map(observation => Date.parse(observation.startDateTime))))}
-                                onDateRangeChange={handleDateRangeChange}
+                            <DateRangePicker
+                                dateRange={dateRange}
+                                onDateRangeChange={((newDateRange) => {
+                                    console.log("date range changed", newDateRange)
+                                    setDateRange(newDateRange)
+                                })}
+                                includedDates={Array.from(new Set(Array.from(observations).map(observation => {
+                                    const date = new Date(Date.parse(observation.startDateTime));
+                                    return date.setHours(0, 0, 0, 0)
+                                })))}
                             />
                         </div>
-                    );
+                    )
                 case 'Graph':
                     return (
                         <div
