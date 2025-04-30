@@ -10,7 +10,8 @@ const minimumModuleSizes = new Map([
     ["Graph", {w: 2, h: 2}],
     ["Legend", {w: 2, h: 2}],
     ["View2D", {w: 6, h: 3}],
-    ["DateRangePicker", {w: 3, h: 1}]
+    ["DateRangePicker", {w: 3, h: 1}],
+    ["Slider", {w: 3, h: 1}]
   ])
 
 function DashboardCreation() {
@@ -109,6 +110,7 @@ function DashboardCreation() {
                         <MenuItem onClick={handleClose}>2D View</MenuItem>
                         <MenuItem onClick={handleClose}>Graph</MenuItem>
                         <MenuItem onClick={handleClose}>DateRangePicker</MenuItem>
+                        <MenuItem onClick={handleClose}>Slider</MenuItem>
                     </Menu>
                 </div>
             </div>
