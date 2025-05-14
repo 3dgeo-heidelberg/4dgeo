@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Graph from "../modules/Graph";
+import React, { useState } from "react";
 import MapView from "../modules/View2D";
-import "./Dashboard.css";
-import { addDays } from 'date-fns';
+import "./Dashboard.css"
 
 import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
-import Testmap from "../testmap";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -18,8 +15,6 @@ function Dashboard({ layout, observations }) {
     const [sliderRange, setSliderRange] = useState([0, 100]);
 
     const [dateTimeRange, setDateTimeRange] = useState({ startDate: 0, endDate: Date.now()})
-
-    const [typeColors, setTypeColors] = useState(new Map())
 
     const [firstObservationLoading, setFirstObservationLoading] = useState(true);
     
@@ -188,7 +183,7 @@ function Dashboard({ layout, observations }) {
                            <MapView
                                 className="mapview"
                                 observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
-                                typeColors={typeColors}
+                                typeColors={new Map()}
                             />
                         </div>
                     );

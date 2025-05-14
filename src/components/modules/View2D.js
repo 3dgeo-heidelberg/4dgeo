@@ -1,4 +1,4 @@
-import { MapContainer, useMapEvents, ImageOverlay, LayersControl, Polygon, Popup, Rectangle, Circle, LayerGroup, Tooltip, Marker, useMapEvent } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
+import { MapContainer, ImageOverlay, LayersControl, Polygon, Rectangle, Circle, LayerGroup, Tooltip } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
 import L from "leaflet"; // Import Leaflet library to access its utility methods
 
 import "leaflet/dist/leaflet.css";
