@@ -1,11 +1,9 @@
-import { de } from 'date-fns/locale'
 import {
   Button,
   CalendarCell,
   CalendarGrid,
   DateInput,
   DateRangePicker as AriaDateRangePicker,
-  DateRangePickerProps as AriaDateRangePickerProps,
   DateSegment,
   Dialog,
   FieldError,
@@ -17,7 +15,7 @@ import {
   OverlayArrow,
 } from 'react-aria-components';
 import {parseAbsoluteToLocal} from '@internationalized/date';
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { addDays } from 'date-fns';
 
 import './DateRangePicker.css'

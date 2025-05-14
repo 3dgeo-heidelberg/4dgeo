@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Graph from "../modules/Graph";
+import React, { useState } from "react";
 import MapView from "../modules/View2D";
-import "./Dashboard.css";
-import { addDays } from 'date-fns';
+import "./Dashboard.css"
 
 import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
@@ -18,69 +16,56 @@ function Dashboard({ layout, observations }) {
 
     const [dateTimeRange, setDateTimeRange] = useState({ startDate: 0, endDate: Date.now()})
 
-    const [filteredObservations, setFilteredObservations] = useState(observations)
-    const [typeColors, setTypeColors] = useState(new Map())
-
     const [firstObservationLoading, setFirstObservationLoading] = useState(true);
+    
 
-    const filterObservations = () => {
-        setFilteredObservations(Array.from(observations).filter((observation) => {
-            return Date.parse(observation.startDateTime) >= dateTimeRange.startDate && Date.parse(observation.startDateTime) <= dateRange.endDate;
-        }));
+    const filterObservations = (startDate, endDate) => {
+        return Array.from(observations).filter((observation) => {
+            return Date.parse(observation.startDateTime) >= startDate && Date.parse(observation.startDateTime) <= endDate;
+        }).sort((a, b) => a.startDateTime > b.startDateTime ? 1 : -1);
     }
 
-    useEffect(() => {
-        const newTypeColors = new Map();
-        const allTypes = new Set();
-        
-        Array.from(filteredObservations).forEach(observation => {
-            Array.from(observation["geoObjects"]).forEach(geoObjects => {
-                allTypes.add(geoObjects["type"]);
-            });
-        });
+    const resetSliderRange = (includedDateTimes) => {
+        if(includedDateTimes.length >= 2) {
+            setSliderRange([includedDateTimes[0], includedDateTimes[includedDateTimes.length - 1]])
+        } else {
+            setSliderRange([0, 100])
+        }
+    }
 
-        allTypes.forEach(type => {
-            newTypeColors.set(type, `#${Math.floor(Math.random()*16777215).toString(16)}`)
-        })
-        setTypeColors(newTypeColors);
-    }, [filteredObservations])
+    const handleDateRangeSelected = (newDateRange) => {      
+        let newFilteredObservations = filterObservations(newDateRange);
 
-    useEffect(() => {
-        setDateTimeRange({startDate: sliderRange[0], endDate: sliderRange[1]})
-        // setFilteredObservations(Array.from(observations).filter((observation) => {
-        //     return Date.parse(observation.startDateTime) >= sliderRange[0] && Date.parse(observation.startDateTime) <= sliderRange[1];
-        // }));
-    }, [sliderRange])
-
-    useEffect(() => {
+        resetSliderRange(Array.from(new Set(newFilteredObservations.map(observation => Date.parse(observation.startDateTime)))));
 
         setDateTimeRange({
-            startDate: dateRange.startDate,
-            endDate: addDays(dateRange.endDate, 1) - 1
-        })
-        let filtered = Array.from(observations).map(observation => Date.parse(observation.startDateTime)).filter((startDateTime) => {
-            return startDateTime >= sliderRange[0] && startDateTime <= sliderRange[1];
+            startDate: newDateRange.startDate,
+            endDate: newDateRange.startDate
         });
-        filtered.sort((a, b) => a - b)
+    }
 
-        setSliderRange([filtered[0], filtered[filtered.length - 1]])
-    }, [dateRange])
 
-    useEffect(() => {
-        if (firstObservationLoading && observations.length > 0) {
-            console.log("setting minmax dates")
-            setDateRange({
-                startDate: Math.min(...observations.map(observation => Date.parse(observation.startDateTime))), 
-                endDate: Math.max(...observations.map(observation => Date.parse(observation.startDateTime)))
-            })
-            setFirstObservationLoading(false)
+    const handleSliderRangeSelected = (newSliderRange) => {
+        setSliderRange(newSliderRange);
+
+        setDateTimeRange({
+            startDate: newSliderRange[0],
+            endDate: newSliderRange[1]
+        });
+    }
+
+
+    if (firstObservationLoading && observations.length > 0) {
+        let tempStartEnd = {
+            startDate: Math.min(...observations.map(observation => Date.parse(observation.startDateTime))), 
+            endDate: Math.max(...observations.map(observation => Date.parse(observation.startDateTime)))
         }
-        filterObservations();
-    }, [observations])
+        setDateRange(tempStartEnd)
+        setDateTimeRange(tempStartEnd)
+        resetSliderRange(Array.from(new Set(observations.map(observation => Date.parse(observation.startDateTime)))));
 
-    useEffect(() => {
-        filterObservations()
-    }, [dateTimeRange])
+        setFirstObservationLoading(false)
+    }
 
     const generateDOM = () => {
         return Array.from(layout).map((layoutItem, i) => {
@@ -105,7 +90,7 @@ function Dashboard({ layout, observations }) {
                             <ObservationSlider
                                 includedDateTimes={Array.from(new Set(Array.from(observations).map(observation => new Date(Date.parse(observation.startDateTime)))))}
                                 sliderRange={sliderRange}
-                                handleSliderRangeChange={setSliderRange}
+                                handleSliderRangeChange={handleSliderRangeSelected}
                             />
                         </div>
                     )
@@ -127,10 +112,7 @@ function Dashboard({ layout, observations }) {
                         >
                             <DateRangePicker
                                 dateRange={dateRange}
-                                handleDateRangeChange={((newDateRange) => {
-                                    console.log("date range changed", newDateRange)
-                                    setDateRange(newDateRange)
-                                })}
+                                onDateRangeChange={handleDateRangeSelected}
                                 includedDates={Array.from(new Set(Array.from(observations).map(observation => {
                                     const date = new Date(Date.parse(observation.startDateTime));
                                     return date.setHours(0, 0, 0, 0)
@@ -138,30 +120,47 @@ function Dashboard({ layout, observations }) {
                             />
                         </div>
                     )
-                case 'Graph':
-                    return (
-                        <div
-                            className="reactGridItem"
-                            key={layoutItem["i"]}
-                            data-grid={{   
-                                w: layoutItem["x"],
-                                x: layoutItem["y"],
-                                y: layoutItem["w"],
-                                h: layoutItem["h"],
-                                i: layoutItem["i"],
-                                minW: 2,
+                // case 'Graph':
+                //     return (
+                //         <div
+                //             className="reactGridItem"
+                //             key={layoutItem["i"]}
+                //             data-grid={{   
+                //                 w: layoutItem["x"],
+                //                 x: layoutItem["y"],
+                //                 y: layoutItem["w"],
+                //                 h: layoutItem["h"],
+                //                 i: layoutItem["i"],
+                //                 minW: 2,
 
-                                minH: 2,           
-                                static: true
-                            }}
-                        >
-                           <Graph 
-                                observations={filteredObservations}
-                                dateRange={dateRange}
-                            />
-                        </div>
-                    );
+                //                 minH: 2,           
+                //                 static: true
+                //             }}
+                //         >
+                //            <Graph 
+                //                 observations={filteredObservations}
+                //                 dateRange={dateRange}
+                //             />
+                //         </div>
+                //     );
                 case 'View2D':
+                    // return (
+                    //     <div className="reactGridItem"
+                    //     key={layoutItem["i"]}
+                    //     data-grid={{
+                    //         x: layoutItem["x"],
+                    //         y: layoutItem["y"],
+                    //         w: layoutItem["w"],
+                    //         h: layoutItem["h"],
+                    //         i: layoutItem["i"],
+                    //         minW: 6,
+
+                    //         minH: 3,  
+                    //         static: true
+                    //     }}>
+                    //         <Testmap/>
+                    //     </div>
+                    // )
                     return (
                         <div
                             className="reactGridItem"
@@ -180,9 +179,8 @@ function Dashboard({ layout, observations }) {
                         >
                            <MapView
                                 className="mapview"
-                                observations={filteredObservations}
-                                typeColors={typeColors}
-                                dateRange={dateRange}
+                                observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
+                                typeColors={new Map()}
                             />
                         </div>
                     );
