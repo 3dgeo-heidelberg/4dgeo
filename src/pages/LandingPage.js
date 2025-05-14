@@ -37,6 +37,7 @@ function LandingPage() {
   }
 
   async function fetchExampleDashboards() {
+    console.log("Fetching example dashboards", window.location.href);
     const json = await (await fetch(`${window.location.href}/custom/example_dashboards/example_dashboards.json`, {
       headers : { 
         'Content-Type': 'application/json',

@@ -112,7 +112,7 @@ function Dashboard({ layout, observations }) {
                         >
                             <DateRangePicker
                                 dateRange={dateRange}
-                                onDateRangeChange={handleDateRangeSelected}
+                                handleDateRangeChange={handleDateRangeSelected}
                                 includedDates={Array.from(new Set(Array.from(observations).map(observation => {
                                     const date = new Date(Date.parse(observation.startDateTime));
                                     return date.setHours(0, 0, 0, 0)
