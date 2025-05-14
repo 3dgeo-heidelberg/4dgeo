@@ -5,7 +5,6 @@ import "./Dashboard.css"
 import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
-import Testmap from "../testmap";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
