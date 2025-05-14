@@ -38,7 +38,6 @@ function Dashboard({ layout, observations }) {
         
         setDateRange(newDateRange);    
         let newFilteredObservations = filterObservations(newDateRange.startDate, newDateRange.endDate);
-        console.log("newDateRange", new Date(newDateRange.startDate), new Date(newDateRange.endDate), newFilteredObservations, observations)
 
         resetSliderRange(Array.from(new Set(newFilteredObservations.map(observation => Date.parse(observation.startDateTime)))));
 
