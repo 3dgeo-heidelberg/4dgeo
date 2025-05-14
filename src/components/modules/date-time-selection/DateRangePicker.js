@@ -18,6 +18,7 @@ import {
 } from 'react-aria-components';
 import {parseAbsoluteToLocal} from '@internationalized/date';
 import React, { useEffect, useState } from "react";
+import { addDays } from 'date-fns';
 
 import './DateRangePicker.css'
 
@@ -60,7 +61,7 @@ export default function DateRangePicker({ includedDates, dateRange, onDateRangeC
             }}
             onChange={item => onDateRangeChange({
                 startDate: item.start.toDate().getTime(),
-                endDate: item.end.toDate().getTime()
+                endDate: addDays(item.end.toDate().getTime(), 1) - 1
             })}
             granularity="day"
         >
