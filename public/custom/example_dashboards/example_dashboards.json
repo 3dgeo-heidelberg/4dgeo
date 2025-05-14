@@ -9,7 +9,14 @@
           "y":0,
           "w":3,
           "h":1,
-          "i":"Calendar"
+          "i":"DateRangePicker"
+        },
+        {
+          "x":0,
+          "y":2,
+          "w":3,
+          "h":1,
+          "i":"Slider"
         },
         {
           "x":4,
@@ -31,7 +38,14 @@
           "y":0,
           "w":3,
           "h":1,
-          "i":"Calendar"
+          "i":"DateRangePicker"
+        },
+        {
+          "x":0,
+          "y":2,
+          "w":3,
+          "h":1,
+          "i":"Slider"
         },
         {
           "x":4,
@@ -42,7 +56,7 @@
         }
       ],
       "url": "./testing_data/bee_monitoring_hd/sample_bees.json",
-      "interval": 6
+      "interval": 15
     }
   ]
 }

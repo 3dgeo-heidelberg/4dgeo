@@ -3,16 +3,13 @@
     transition: height 200ms ease;
 }
 
-/* .reactGridItem {
+.reactGridItem {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 200ms ease;
-    transition-property: left, top;
-    background: rgba(0, 132, 255, 0.473);
-    font-family: Arial, Helvetica, sans-serif;
+    background: rgba(221, 221, 221, 0.4);
     text-align: center;
-} */
+}
 .mapview {
     margin-left: 10em;
 }

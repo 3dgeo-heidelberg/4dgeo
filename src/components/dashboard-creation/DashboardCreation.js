@@ -7,10 +7,11 @@ import './DashboardCreation.css';
 import { useNavigate, createSearchParams } from "react-router-dom";
 
 const minimumModuleSizes = new Map([
-    ["Calendar", {w: 3, h: 1}],
     ["Graph", {w: 2, h: 2}],
     ["Legend", {w: 2, h: 2}],
-    ["View2D", {w: 6, h: 3}]
+    ["View2D", {w: 6, h: 3}],
+    ["DateRangePicker", {w: 3, h: 1}],
+    ["Slider", {w: 3, h: 1}]
   ])
 
 function DashboardCreation() {
@@ -96,7 +97,7 @@ function DashboardCreation() {
                         aria-labelledby="moduleSelectButton"
                         anchorEl={anchorEl}
                         open={open}
-                        onClose={handleClose}
+                        onClose={() => setAnchorEl(null)}
                         anchorOrigin={{
                             vertical: 'top',
                             horizontal: 'left',
@@ -106,9 +107,10 @@ function DashboardCreation() {
                             horizontal: 'left',
                         }}
                     >
-                        <MenuItem onClick={handleClose}>Calendar</MenuItem>
                         <MenuItem onClick={handleClose}>2D View</MenuItem>
                         <MenuItem onClick={handleClose}>Graph</MenuItem>
+                        <MenuItem onClick={handleClose}>DateRangePicker</MenuItem>
+                        <MenuItem onClick={handleClose}>Slider</MenuItem>
                     </Menu>
                 </div>
             </div>

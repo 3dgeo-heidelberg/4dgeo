@@ -1,0 +1,8 @@
+.slider-container {
+  width: 100%;
+  padding: 5%;
+
+  .MuiSlider-markLabel {
+    white-space: pre-line;
+  }
+}
