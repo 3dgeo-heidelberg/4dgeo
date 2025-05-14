@@ -16,12 +16,10 @@ import {
 } from 'react-aria-components';
 import {parseAbsoluteToLocal} from '@internationalized/date';
 import React from "react";
-import { addDays } from 'date-fns';
 
 import './DateRangePicker.css'
 
 export default function DateRangePicker({ includedDates, dateRange, handleDateRangeChange }) {
-  // console.log("includedDates", includedDates.map(date => new Date(date).toISOString()), new Date(dateRange.startDate), new Date(dateRange.endDate))
     return (
         <AriaDateRangePicker 
             value={{
