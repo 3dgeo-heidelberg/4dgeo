@@ -5,6 +5,7 @@ import "./Dashboard.css"
 import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
+import Testmap from "../testmap";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -112,10 +113,7 @@ function Dashboard({ layout, observations }) {
                         >
                             <DateRangePicker
                                 dateRange={dateRange}
-                                onDateRangeChange={((newDateRange) => {
-                                    console.log("date range changed", newDateRange)
-                                    setDateRange(newDateRange)
-                                })}
+                                onDateRangeChange={handleDateRangeSelected}
                                 includedDates={Array.from(new Set(Array.from(observations).map(observation => {
                                     const date = new Date(Date.parse(observation.startDateTime));
                                     return date.setHours(0, 0, 0, 0)
@@ -193,7 +191,7 @@ function Dashboard({ layout, observations }) {
         })
     }
 
-    console.log("rerendering dashboard")
+
     return (
         <ResponsiveGridLayout
             layout={layout}
