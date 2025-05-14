@@ -144,23 +144,6 @@ function Dashboard({ layout, observations }) {
                 //         </div>
                 //     );
                 case 'View2D':
-                    // return (
-                    //     <div className="reactGridItem"
-                    //     key={layoutItem["i"]}
-                    //     data-grid={{
-                    //         x: layoutItem["x"],
-                    //         y: layoutItem["y"],
-                    //         w: layoutItem["w"],
-                    //         h: layoutItem["h"],
-                    //         i: layoutItem["i"],
-                    //         minW: 6,
-
-                    //         minH: 3,  
-                    //         static: true
-                    //     }}>
-                    //         <Testmap/>
-                    //     </div>
-                    // )
                     return (
                         <div
                             className="reactGridItem"

@@ -29,7 +29,6 @@ function DashboardPage() {
         const intervalResolution = urlParams.get('interval') == null ? 6 : urlParams.get('interval');
         const interval = setInterval(() => {
             loadData();
-            console.log("Reloading data!");
         }, Number.parseInt(intervalResolution)*1000);
 
         return () => clearInterval(interval); // Cleanup
