@@ -5,6 +5,7 @@ import "./Dashboard.css"
 import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
+import { addDays } from "date-fns";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -33,14 +34,17 @@ function Dashboard({ layout, observations }) {
         }
     }
 
-    const handleDateRangeSelected = (newDateRange) => {      
-        let newFilteredObservations = filterObservations(newDateRange);
+    const handleDateRangeSelected = (newDateRange) => {  
+        
+        setDateRange(newDateRange);    
+        let newFilteredObservations = filterObservations(newDateRange.startDate, newDateRange.endDate);
+        console.log("newDateRange", new Date(newDateRange.startDate), new Date(newDateRange.endDate), newFilteredObservations, observations)
 
         resetSliderRange(Array.from(new Set(newFilteredObservations.map(observation => Date.parse(observation.startDateTime)))));
 
         setDateTimeRange({
             startDate: newDateRange.startDate,
-            endDate: newDateRange.startDate
+            endDate: newDateRange.endDate
         });
     }
 
@@ -54,13 +58,17 @@ function Dashboard({ layout, observations }) {
         });
     }
 
+    const getDateFromDateTime = (dateTime) => {
+        let date = new Date(dateTime);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    }
 
     if (firstObservationLoading && observations.length > 0) {
         let tempStartEnd = {
             startDate: Math.min(...observations.map(observation => Date.parse(observation.startDateTime))), 
             endDate: Math.max(...observations.map(observation => Date.parse(observation.startDateTime)))
         }
-        setDateRange(tempStartEnd)
+        setDateRange({startDate: getDateFromDateTime(tempStartEnd.startDate), endDate: addDays(getDateFromDateTime(tempStartEnd.endDate), 1) - 1});
         setDateTimeRange(tempStartEnd)
         resetSliderRange(Array.from(new Set(observations.map(observation => Date.parse(observation.startDateTime)))));
 
@@ -88,7 +96,7 @@ function Dashboard({ layout, observations }) {
                             }}
                         >
                             <ObservationSlider
-                                includedDateTimes={Array.from(new Set(Array.from(observations).map(observation => new Date(Date.parse(observation.startDateTime)))))}
+                                includedDateTimes={Array.from(new Set(Array.from(filterObservations(dateRange.startDate, dateRange.endDate)).map(observation => new Date(Date.parse(observation.startDateTime)))))}
                                 sliderRange={sliderRange}
                                 handleSliderRangeChange={handleSliderRangeSelected}
                             />

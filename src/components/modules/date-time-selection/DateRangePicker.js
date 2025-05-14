@@ -21,6 +21,7 @@ import { addDays } from 'date-fns';
 import './DateRangePicker.css'
 
 export default function DateRangePicker({ includedDates, dateRange, handleDateRangeChange }) {
+  // console.log("includedDates", includedDates.map(date => new Date(date).toISOString()), new Date(dateRange.startDate), new Date(dateRange.endDate))
     return (
         <AriaDateRangePicker 
             value={{
@@ -29,7 +30,7 @@ export default function DateRangePicker({ includedDates, dateRange, handleDateRa
             }}
             onChange={item => handleDateRangeChange({
                 startDate: item.start.toDate().getTime(),
-                endDate: addDays(item.end.toDate().getTime(), 1) - 1
+                endDate: item.end.toDate().getTime()
             })}
             granularity="day"
         >
