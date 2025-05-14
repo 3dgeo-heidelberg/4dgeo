@@ -22,44 +22,14 @@ import { addDays } from 'date-fns';
 
 import './DateRangePicker.css'
 
-export default function DateRangePicker({ includedDates, dateRange, onDateRangeChange }) {
-    const customDayContent = (day) => {
-        let extraDot = null;
-        if (includedDates.includes(day.getTime())) {
-          extraDot = (
-            <div
-              style={{
-                height: "5px",
-                width: "5px",
-                borderRadius: "100%",
-                background: "orange",
-                position: "absolute",
-                top: 2,
-                right: 2,
-              }}
-            />
-          )
-        }
-        return (
-          <div>
-            {extraDot}
-            {/* <span>{format(day, "d")}</span> */}
-          </div>
-        )
-    }
-
-    let [date, setDate] = useState({
-        start: parseAbsoluteToLocal('2021-04-07T18:45:22Z'),
-        end: parseAbsoluteToLocal('2021-04-08T20:00:00Z')
-      });
-
+export default function DateRangePicker({ includedDates, dateRange, handleDateRangeChange }) {
     return (
         <AriaDateRangePicker 
             value={{
                 start: parseAbsoluteToLocal(new Date(dateRange.startDate).toISOString()),
                 end: parseAbsoluteToLocal(new Date(dateRange.endDate).toISOString())
             }}
-            onChange={item => onDateRangeChange({
+            onChange={item => handleDateRangeChange({
                 startDate: item.start.toDate().getTime(),
                 endDate: addDays(item.end.toDate().getTime(), 1) - 1
             })}
@@ -92,7 +62,7 @@ export default function DateRangePicker({ includedDates, dateRange, onDateRangeC
                         <Button slot="next">▶</Button>
                         </header>
                         <CalendarGrid>
-                        {(date) => <CalendarCell date={date} />}
+                        {(date) => <CalendarCell date={date} className={(date) => includedDates.includes(date.date.toDate().getTime()) ? "react-aria-CalendarCell available" : "react-aria-CalendarCell"} />}
                         </CalendarGrid>
                     </RangeCalendar>
                 </Dialog>

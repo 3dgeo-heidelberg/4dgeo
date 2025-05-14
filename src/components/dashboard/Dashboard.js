@@ -105,7 +105,7 @@ function Dashboard({ layout, observations }) {
                             <ObservationSlider
                                 includedDateTimes={Array.from(new Set(Array.from(observations).map(observation => new Date(Date.parse(observation.startDateTime)))))}
                                 sliderRange={sliderRange}
-                                setSliderRange={setSliderRange}
+                                handleSliderRangeChange={setSliderRange}
                             />
                         </div>
                     )
@@ -127,7 +127,7 @@ function Dashboard({ layout, observations }) {
                         >
                             <DateRangePicker
                                 dateRange={dateRange}
-                                onDateRangeChange={((newDateRange) => {
+                                handleDateRangeChange={((newDateRange) => {
                                     console.log("date range changed", newDateRange)
                                     setDateRange(newDateRange)
                                 })}

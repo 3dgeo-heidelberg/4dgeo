@@ -3,7 +3,7 @@ import Slider from '@mui/material/Slider';
 
 import './ObservationSlider.css'
 
-export default function ObservationSlider({ includedDateTimes, sliderRange, setSliderRange }) {
+export default function ObservationSlider({ includedDateTimes, sliderRange, handleSliderRangeChange }) {
     return includedDateTimes.length > 1 ? (
         <div className='slider-container'>
             <Slider
@@ -28,7 +28,7 @@ export default function ObservationSlider({ includedDateTimes, sliderRange, setS
                 min={Math.min(...includedDateTimes)}
                 max={Math.max(...includedDateTimes)}
                 value={sliderRange}
-                onChangeCommitted={(_, newValue) => setSliderRange(newValue)}
+                onChangeCommitted={(_, newValue) => handleSliderRangeChange(newValue)}
                 disableSwap
             />
         </div>
