@@ -67,7 +67,7 @@ To run 4dGeo locally, follow these steps:
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/4dGeo.git
+   git clone https://github.com/3dgeo-heidelberg/4dgeo.git
    cd 4dGeo
    ```
 
