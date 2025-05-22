@@ -55,8 +55,8 @@
     - **type** - Custom Type for your use case.
     - **datetime** - specific point in time, inside the defined time range.
     - **geometry** - Geometrydata for visualising with the 2D View Module.
-        - **type** - Type of geometry, like Point and Polygon.
-        - **coordinates** - The Coordinates of an Object in reference to the background image. The origin is in the top-left hand corner of the image with the x-values going vertically and the y-values going horizontally.
+        - **type** - Type of geometry like in a geoJson file, like Point and Polygon.
+        - **coordinates** - The Coordinates of an Object in reference to the background image. For 2D-Coordinates, the values have to be [y,x] because the origin is in the top-left hand corner of the image with the x-values going vertically and the y-values going horizontally.
 - **backgroundImageData** - Image source for the background Image of the 2D View Module.
 
 
@@ -71,7 +71,7 @@ To run 4dGeo locally, follow these steps:
    cd 4dGeo
    ```
 
-2. Install dependencies:
+2. Install dependencies (Check if Node.js is installed on your computer. If not, download it from this [link](https://nodejs.org/en/download)):
 
    ```sh
    npm install
@@ -98,4 +98,4 @@ For using this Web-Application, there are two options:
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions or feature requests, feel free to open an issue.
+Contributions are welcome! If you have suggestions or feature requests, feel free to open an issue. For your own implementations, you can also fork this repository.
