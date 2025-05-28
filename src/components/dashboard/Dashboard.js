@@ -75,6 +75,26 @@ function Dashboard({ layout, observations }) {
         setFirstObservationLoading(false)
     }
 
+    const getAllTypesWithColors = () => {
+        const allTypes = new Set();
+        observations.forEach(observation => {
+            observation.geoObjects.forEach(geoObject => {
+                allTypes.add(geoObject.type);
+            });
+        });
+
+        const typeColors = new Map();
+        Array.from(allTypes).map((type) => {
+            const color = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generate a random color
+            typeColors.set(type, color);
+        });
+        return typeColors;
+    }
+
+    const typeColors = getAllTypesWithColors();
+
+
+
     const generateDOM = () => {
         return Array.from(layout).map((layoutItem, i) => {
             const moduleName = layoutItem["i"].split("_")[0]
@@ -147,6 +167,7 @@ function Dashboard({ layout, observations }) {
                            <Chart 
                                 observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
                                 valueKey={layoutItem["valueKey"]}
+                                typeColors={typeColors}
                             />
                         </div>
                     );
