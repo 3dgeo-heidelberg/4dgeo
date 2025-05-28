@@ -6,6 +6,7 @@ import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
 import { addDays } from "date-fns";
+import Chart from "../modules/Chart";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -127,29 +128,28 @@ function Dashboard({ layout, observations }) {
                             />
                         </div>
                     )
-                // case 'Graph':
-                //     return (
-                //         <div
-                //             className="reactGridItem"
-                //             key={layoutItem["i"]}
-                //             data-grid={{   
-                //                 w: layoutItem["x"],
-                //                 x: layoutItem["y"],
-                //                 y: layoutItem["w"],
-                //                 h: layoutItem["h"],
-                //                 i: layoutItem["i"],
-                //                 minW: 2,
-
-                //                 minH: 2,           
-                //                 static: true
-                //             }}
-                //         >
-                //            <Graph 
-                //                 observations={filteredObservations}
-                //                 dateRange={dateRange}
-                //             />
-                //         </div>
-                //     );
+                case 'Chart':
+                    return (
+                        <div
+                            className="reactGridItem"
+                            key={layoutItem["i"]}
+                            data-grid={{   
+                                x: layoutItem["x"],
+                                y: layoutItem["y"],
+                                w: layoutItem["w"],
+                                h: layoutItem["h"],
+                                i: layoutItem["i"],
+                                minW: 3,
+                                minH: 1,           
+                                static: true
+                            }}
+                        >
+                           <Chart 
+                                observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
+                                valueKey={layoutItem["valueKey"]}
+                            />
+                        </div>
+                    );
                 case 'View2D':
                     return (
                         <div
