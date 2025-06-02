@@ -30,6 +30,9 @@ export default function Chart({ observations, typeColors }) {
 
 
     const observationsToBarData = (observations) => {
+        if (valueKey === "") {
+            return {};
+        }
         return observations.map((observation, index) => {
             const typeSums = {
                 name: index
@@ -43,54 +46,17 @@ export default function Chart({ observations, typeColors }) {
                 const { type, customEntityData } = geoObject;
                 const value = customEntityData[valueKey];
 
-                // if (!typeSums[type]) {
-                //     typeSums[type] = value;
-                // }
-
                 typeSums[type] += value;
             })
             
             return typeSums
-
-
-            // const summedData = {}
-            // observation.geoObjects.map((geoObject) => {
-            //     if (!geoObject.customEntityData) {
-            //         console.log("No customEntityData or valueKey not found for geoObject", geoObject);
-            //         return;
-            //     }
-            //     if(Object.keys(summedData).includes(geoObject.type)) {
-            //         summedData[geoObject.type] = summedData[geoObject.type] + geoObject.customEntityData[valueKey];
-            //     }
-            //     else {
-            //         console.log("only once", Object.keys(summedData))
-            //         summedData[geoObject.type] = geoObject.customEntityData[valueKey];
-            //     }
-            //     // summedData[geoObject.type] = (summedData[geoObject.type] || 0) + geoObject.customEntityData[valueKey];
-            // })
-            // if (Object.keys(summedData).length === 0) {
-            //     return {
-            //         name: index,
-            //         value: 0,
-            //     };
-            // }
-            // else {
-            //     const data = {
-            //         name: index
-            //     };
-            //     console.log("summedData", summedData);
-            //     Object.keys(summedData).forEach((type) => {
-            //         data[type] = summedData[type];
-            //     });
-            //     return data;
-            // }
         })
     }
 
     const data = observationsToBarData(observations);
 
     return (
-        <ResponsiveContainer width="90%" height="80%" className={"chart-container"}>
+        <div className='chart-module-container'>
             <div className="field-selector">
                 <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="field-select-label">Field</InputLabel>
@@ -111,31 +77,24 @@ export default function Chart({ observations, typeColors }) {
                 </FormControl>
             </div>
 
-            { valueKey === "" ? (
-                <BarChart width="85%" height="70%" data={{}} className='chart no-data'>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Brush dataKey="name" height={30} stroke="#8884d8" />
-                </BarChart>
-            ) : (
-                <BarChart width="85%" height="70%" data={data} className='chart'>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    {/* <Bar dataKey={"bee"} stackId={"a"} fill={"#00FFFF"} /> */}
-                    {Array.from(typeColors).map(([type, color]) => {
-                        console.log("type", type, "color", color);
-                        return <Bar key={type.toString()} dataKey={type.toString()} stackId={"a"} fill={color} />
-                    })}
-                    <Brush dataKey="name" height={30} stroke="#8884d8" />
-                </BarChart>
-            )}
-        </ResponsiveContainer>
-        
+            <div className='chart-container'>
+                <ResponsiveContainer width="95%" height="95%" className={"chart-responsive-container"}>
+                    { valueKey === "" ? ("") : (
+                        <BarChart width="85%" height="70%" data={data} className='chart'>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            {Array.from(typeColors).map(([type, color]) => {
+                                console.log("type", type, "color", color);
+                                return <Bar key={type.toString()} dataKey={type.toString()} stackId={"a"} fill={color} />
+                            })}
+                            <Brush dataKey="name" height={30} stroke="#8884d8" />
+                        </BarChart>
+                    )}
+                </ResponsiveContainer>
+            </div>
+        </div>        
     );
 }
