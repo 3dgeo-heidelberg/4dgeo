@@ -7,7 +7,7 @@ import './DashboardCreation.css';
 import { useNavigate, createSearchParams } from "react-router-dom";
 
 const minimumModuleSizes = new Map([
-    ["Graph", {w: 2, h: 2}],
+    ["Chart", {w: 2, h: 2}],
     ["Legend", {w: 2, h: 2}],
     ["View2D", {w: 6, h: 3}],
     ["DateRangePicker", {w: 3, h: 1}],
@@ -116,7 +116,7 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
                         }}
                     >
                         <MenuItem onClick={handleClose}>2D View</MenuItem>
-                        <MenuItem onClick={handleClose}>Graph</MenuItem>
+                        <MenuItem onClick={handleClose}>Chart</MenuItem>
                         <MenuItem onClick={handleClose}>DateRangePicker</MenuItem>
                         <MenuItem onClick={handleClose}>Slider</MenuItem>
                     </Menu>
