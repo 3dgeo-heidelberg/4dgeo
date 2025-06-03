@@ -9,57 +9,6 @@
 - **Customizable Layout** - Configure the dashboard according to specific project needs.
 
 
-## Data Model
-
-4dGeo utilizes a structured data model to visualize geospatial and temporal data. The model is designed around observations, where each observation represents a snapshot of an area with detected geoobjects and their properties at a specific point in time.
-
-### JSON Structure
-```
-{
-    "observations": [
-        {
-            "startDateTime": "String in ISO 8601 format",
-            "endDateTime": "String in ISO 8601 format",
-            "geoObjects": [
-                {
-                    "id": "",
-                    "type": "",
-                    "dateTime": "String in ISO 8601 format",
-                    "geometry": {
-                        "type": "",
-                        "coordinates": [
-                            [1, 1, 1],
-                            [1, 2, 1]
-                        ]
-                    },
-                    "customEntityData": {
-                        "customKey": "",
-                        "customKey2": ""
-                    }
-                }
-            ],
-            "backgroundImageData": {
-                "url": "",
-                "height": 0,
-                "width": 0
-            }        
-        }
-    ]
-}
-```
-
-### Explanation
-- **Observations** - A list where each element represents a singular observation.
-- **startDateTime & endDateTime** - The time range of the observation.
-- **geoObjects** - A list for every Object inside each observation.
-    - **type** - Custom Type for your use case.
-    - **datetime** - specific point in time, inside the defined time range.
-    - **geometry** - Geometrydata for visualising with the 2D View Module.
-        - **type** - Type of geometry like in a geoJson file, like Point and Polygon.
-        - **coordinates** - The Coordinates of an Object in reference to the background image. For 2D-Coordinates, the values have to be [y,x] because the origin is in the top-left hand corner of the image with the x-values going vertically and the y-values going horizontally.
-- **backgroundImageData** - Image source for the background Image of the 2D View Module.
-
-
 ## Installation
 
 To run 4dGeo locally, follow these steps:
