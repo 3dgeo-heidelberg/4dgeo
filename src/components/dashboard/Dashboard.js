@@ -166,7 +166,6 @@ function Dashboard({ layout, observations }) {
                         >
                            <Chart 
                                 observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
-                                valueKey={layoutItem["valueKey"]}
                                 typeColors={typeColors}
                             />
                         </div>
