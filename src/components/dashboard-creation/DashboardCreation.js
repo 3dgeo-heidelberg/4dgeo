@@ -14,11 +14,11 @@ const minimumModuleSizes = new Map([
     ["Slider", {w: 3, h: 1}]
   ])
 
-function DashboardCreation() {
+function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterval }) {
     const navigate = useNavigate();
-    const [layout, setLayout] = useState([])
+    // const [layout, setLayout] = useState([])
     const [counterForKey, setCounterForKey] = useState(0)
-    const [url, setUrl] = useState("")
+    // const [url, setUrl] = useState("")
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -76,6 +76,13 @@ function DashboardCreation() {
                     <TextField id="url-input" label="Data Source" variant="outlined" onChange={(event) => {
                             setUrl(event.target.value);
                         }} 
+                        value={url}
+                    />
+
+                    <TextField id="interval-input" label="Interval" variant="outlined" type="number" onChange={(event) => {
+                            setInterval(event.target.value);
+                        }}
+                        value={interval}
                     />
                     
                     <Button 

@@ -2,12 +2,19 @@
   /* padding: 2rem; */
   display: flex;
 
-  /* .side-bar {
-    width: 15%;
-    min-width: 200px; */
+  .side-bar {
+    width: 20%;
+    min-width: 200px;
 
+    & > * {
+      width: inherit;
+      min-width: inherit;
+    }
 
-  /* } */
+    .avatar {
+      margin-right: 0.7rem;
+    }
+  }
 
   .main-content {
     display: flex;
@@ -15,11 +22,14 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 2rem;
     
     .content-stack {
       display: flex;
       width: 100%;
+
+      .content-header {
+        margin: 0.5rem 2rem;
+      }
     }
   }
 

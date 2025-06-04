@@ -1,7 +1,7 @@
 @import url("../../../styles/main_theme.css");
 
 .react-aria-DateRangePicker {
-  color: var(--text-color);
+  color: var(--clr-dark-a0);
 
   .react-aria-Group {
     display: flex;
@@ -13,20 +13,20 @@
     overflow: auto;
     position: relative;
     padding: 4px 4px 4px 8px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--clr-surface-a30);
     border-radius: 6px;
-    background: var(--field-background);
+    background: var(--clr-surface-a20);
     white-space: nowrap;
 
     &[data-pressed] {
       box-shadow: none;
-      background: var(--highlight-background);
+      background: var(--clr-surface-a50);
     }
 
-    &[data-focus-within] {
+    /* &[data-focus-within] {
       outline: 2px solid var(--focus-ring-color);
       outline-offset: -1px;
-    }
+    } */
   }
 
   [slot=start] + span {
@@ -39,9 +39,8 @@
   }
 
   .react-aria-Button {
-    background: var(--highlight-background);
-    color: var(--highlight-foreground);
-    border: 2px solid var(--field-background);
+    background: var(--clr-primary-a20);
+    color: var(--clr-dark-a0);
     forced-color-adjust: none;
     border-radius: 4px;
     border: none;
@@ -56,7 +55,7 @@
     right: 0;
 
     &[data-focus-visible] {
-      outline: 2px solid var(--focus-ring-color);
+      outline: 2px solid var(--clr-primary-a40);
       outline-offset: 2px;
     }
   }
@@ -71,13 +70,13 @@
 }
 
 .react-aria-Popover[data-trigger=DateRangePicker] {
-    --background-color: var(--overlay-background);
+    --background-color: var(--clr-surface-a10);
 
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--clr-surface-a30);
     box-shadow: 0 8px 20px rgba(0 0 0 / 0.1);
     border-radius: 6px;
     background: var(--background-color);
-    color: var(--text-color);
+    color: var(--clr-dark-a0);
     outline: none;
     max-width: 300px;
     transition: transform 200ms, opacity 200ms;
@@ -85,7 +84,7 @@
     .react-aria-OverlayArrow svg {
         display: block;
         fill: var(--background-color);
-        stroke: var(--border-color);
+        stroke: var(--clr-surface-a50);
         stroke-width: 1px;
     }
     
@@ -143,7 +142,7 @@
       padding: 8px 8px 8px 8px;
       width:fit-content;
       max-width: 100%;
-      color: var(--text-color);
+      color: var(--clr-dark-a0);
     
       & header {
         display: flex;
@@ -186,21 +185,21 @@
         }
     
         &[data-pressed] {
-          background: var(--gray-100);
+          background: var(--clr-surface-a10);
         }
     
         &[data-focus-visible] {
-          outline: 40px solid var(--highlight-background);
+          outline: 40px solid var(--clr-primary-a30);
           outline-offset: -2px;
         }
     
         &[data-selected] {
-          background: var(--highlight-background);
-          color: var(--highlight-foreground);
+          background: var(--clr-primary-a30);
+          color: var(--clr-light-a0);
           border-radius: 0;
     
           &[data-focus-visible] {
-            outline-color: var(--highlight-foreground);
+            outline-color: var(--clr-light-a0);
             outline-offset: -3px;
           }
         }
@@ -210,7 +209,7 @@
           width:0.4em;
           height:0.4em;
           border-radius:80%;
-          background: var(--orange-200);
+          background: #515051;
           position: relative;
           bottom: 0.7em;
           left: 0.2em;
