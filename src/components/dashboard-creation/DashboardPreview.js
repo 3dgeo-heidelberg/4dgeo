@@ -5,7 +5,7 @@ import { Responsive, WidthProvider } from "react-grid-layout";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-function DashboardPreview({ layout, onLayoutChange }) {
+function DashboardPreview({ layout, onLayoutChange, minimumModuleSizes }) {
     const generateDOM = () => {
         return Array.from(layout).map((layoutItem) => {
             return (
@@ -18,8 +18,8 @@ function DashboardPreview({ layout, onLayoutChange }) {
                         w: layoutItem["w"],
                         h: layoutItem["h"],
                         i: layoutItem["i"],
-                        minW: 2,
-                        minH: 1
+                        minW: minimumModuleSizes.get(layoutItem["i"].split("_")[0]).w,
+                        minH: minimumModuleSizes.get(layoutItem["i"].split("_")[0]).h,
                     }}
                 >
                     <div className="content">{layoutItem["i"].split("_")[0]}</div>
