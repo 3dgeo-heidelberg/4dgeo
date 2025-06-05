@@ -6,6 +6,7 @@ import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
 import { addDays } from "date-fns";
+import Chart from "../modules/Chart";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -74,6 +75,26 @@ function Dashboard({ layout, observations }) {
         setFirstObservationLoading(false)
     }
 
+    const getAllTypesWithColors = () => {
+        const allTypes = new Set();
+        observations.forEach(observation => {
+            observation.geoObjects.forEach(geoObject => {
+                allTypes.add(geoObject.type);
+            });
+        });
+
+        const typeColors = new Map();
+        Array.from(allTypes).map((type) => {
+            const color = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generate a random color
+            typeColors.set(type, color);
+        });
+        return typeColors;
+    }
+
+    const typeColors = getAllTypesWithColors();
+
+
+
     const generateDOM = () => {
         return Array.from(layout).map((layoutItem, i) => {
             const moduleName = layoutItem["i"].split("_")[0]
@@ -127,29 +148,28 @@ function Dashboard({ layout, observations }) {
                             />
                         </div>
                     )
-                // case 'Graph':
-                //     return (
-                //         <div
-                //             className="reactGridItem"
-                //             key={layoutItem["i"]}
-                //             data-grid={{   
-                //                 w: layoutItem["x"],
-                //                 x: layoutItem["y"],
-                //                 y: layoutItem["w"],
-                //                 h: layoutItem["h"],
-                //                 i: layoutItem["i"],
-                //                 minW: 2,
-
-                //                 minH: 2,           
-                //                 static: true
-                //             }}
-                //         >
-                //            <Graph 
-                //                 observations={filteredObservations}
-                //                 dateRange={dateRange}
-                //             />
-                //         </div>
-                //     );
+                case 'Chart':
+                    return (
+                        <div
+                            className="reactGridItem"
+                            key={layoutItem["i"]}
+                            data-grid={{   
+                                x: layoutItem["x"],
+                                y: layoutItem["y"],
+                                w: layoutItem["w"],
+                                h: layoutItem["h"],
+                                i: layoutItem["i"],
+                                minW: 3,
+                                minH: 1,           
+                                static: true
+                            }}
+                        >
+                           <Chart 
+                                observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
+                                typeColors={typeColors}
+                            />
+                        </div>
+                    );
                 case 'View2D':
                     return (
                         <div
