@@ -1,25 +1,14 @@
-import React, { useState } from "react";
 import MapView from "../modules/View2D";
 import "./Dashboard.css"
 
 import { Responsive, WidthProvider } from "react-grid-layout";
 import DateRangePicker from "../modules/date-time-selection/DateRangePicker";
 import ObservationSlider from "../modules/date-time-selection/ObservationSlider";
-import { addDays } from "date-fns";
 import Chart from "../modules/Chart";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-function Dashboard({ layout, observations }) {
-    
-    //State Management
-    const [dateRange, setDateRange] = useState({ startDate: 0, endDate: Date.now()});
-    const [sliderRange, setSliderRange] = useState([0, 100]);
-
-    const [dateTimeRange, setDateTimeRange] = useState({ startDate: 0, endDate: Date.now()})
-
-    const [firstObservationLoading, setFirstObservationLoading] = useState(true);
-    
+function Dashboard({ layout, observations, dateRange, setDateRange, sliderRange, setSliderRange, dateTimeRange, setDateTimeRange }) {
 
     const filterObservations = (startDate, endDate) => {
         return Array.from(observations).filter((observation) => {
@@ -56,23 +45,6 @@ function Dashboard({ layout, observations }) {
             startDate: newSliderRange[0],
             endDate: newSliderRange[1]
         });
-    }
-
-    const getDateFromDateTime = (dateTime) => {
-        let date = new Date(dateTime);
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-    }
-
-    if (firstObservationLoading && observations.length > 0) {
-        let tempStartEnd = {
-            startDate: Math.min(...observations.map(observation => Date.parse(observation.startDateTime))), 
-            endDate: Math.max(...observations.map(observation => Date.parse(observation.startDateTime)))
-        }
-        setDateRange({startDate: getDateFromDateTime(tempStartEnd.startDate), endDate: addDays(getDateFromDateTime(tempStartEnd.endDate), 1) - 1});
-        setDateTimeRange(tempStartEnd)
-        resetSliderRange(Array.from(new Set(observations.map(observation => Date.parse(observation.startDateTime)))));
-
-        setFirstObservationLoading(false)
     }
 
     const getAllTypesWithColors = () => {

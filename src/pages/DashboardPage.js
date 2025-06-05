@@ -3,48 +3,144 @@ import Dashboard from "../components/dashboard/Dashboard";
 import { useState, useEffect } from "react";
 import Box from '@mui/material/Box';
 import { fetchJsonData } from "../utils/http_fetcher";
+import { Button, Divider, styled } from "@mui/material";
+import { addDays } from "date-fns";
 
 function DashboardPage() {
     const urlParams = useSearchParams()[0]
     const [observations, setObservations] = useState([])
+    const [wasFileUploaded, setWasFileUploaded] = useState(false);
 
     const [htmlHeaderString, setHtmlHeaderString] = useState();
+
+
+    const [dateRange, setDateRange] = useState({ startDate: 0, endDate: Date.now()});
+    const [sliderRange, setSliderRange] = useState([0, 100]);
+
+    const [dateTimeRange, setDateTimeRange] = useState({ startDate: 0, endDate: Date.now()})
 
     async function fetchCustomHeader() {
         setHtmlHeaderString(await (await fetch(`custom/custom_html/dashboard_page_header.html`)).text());
     }
 
     useEffect(() => {
-        async function loadData() {
+        async function loadData(isInitialLoad = false) {
             const data = await fetchJsonData(urlParams.get('url'));
             if (data == null) {
                 setObservations([]);
             } else {
                 setObservations(data.observations);
+                if(isInitialLoad) {
+                    resetDashboardState(data.observations);
+                }
             }
         }
-        loadData();
+        loadData(true);
         fetchCustomHeader();
 
         const intervalResolution = urlParams.get('interval') == null ? 6 : urlParams.get('interval');
         const interval = setInterval(() => {
-            loadData();
-            console.log("Reloading data!");
+            if(!wasFileUploaded) {
+                loadData();
+                console.log("Reloading data!");
+            }
         }, Number.parseInt(intervalResolution)*1000);
 
         return () => clearInterval(interval); // Cleanup
     }, [urlParams]);
 
-    return (
-        <Box sx={{ height: '100vh', padding: 2, display: 'flex', flexDirection: 'column' }}>
-            <div className='header'>
-                <div dangerouslySetInnerHTML={{__html: htmlHeaderString}}/>
-            </div>
+    const getDateFromDateTime = (dateTime) => {
+        let date = new Date(dateTime);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    }
 
-            <Dashboard
-                layout={JSON.parse(urlParams.get('layout'))}
-                observations={observations}
-            />
+    const resetDashboardState = (observations) => {
+        let tempStartEnd = {
+            startDate: Math.min(...observations.map(observation => Date.parse(observation.startDateTime))), 
+            endDate: Math.max(...observations.map(observation => Date.parse(observation.startDateTime)))
+        }
+        setDateRange({startDate: getDateFromDateTime(tempStartEnd.startDate), endDate: addDays(getDateFromDateTime(tempStartEnd.endDate), 1) - 1});
+        setDateTimeRange(tempStartEnd)
+
+        const uniqueDateTimes = Array.from(new Set(observations.map(observation => Date.parse(observation.startDateTime))))
+
+        if(uniqueDateTimes.length >= 2) {
+            setSliderRange([uniqueDateTimes[0], uniqueDateTimes[uniqueDateTimes.length - 1]])
+        } else {
+            setSliderRange([0, 100])
+        }
+    }
+
+    const onFileUpload = async (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+            const content = e.target.result;
+            try {
+                const jsonData = JSON.parse(content);
+                if (jsonData.observations) {
+                    // setFirstObservationLoading(true);
+                    setObservations(jsonData.observations);
+                    setWasFileUploaded(true);
+
+                    resetDashboardState(jsonData.observations);
+                    console.log("Data loaded from file:", jsonData.observations);
+                } else {
+                    console.error("Invalid data format");
+                }
+            } catch (error) {
+                console.error("Error parsing JSON file:", error);
+            }
+        }
+        reader.readAsText(file)
+    }
+
+
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
+    return (
+        <Box className="dashboard-container" sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem 4rem'}}>
+                <div className="custom-header" dangerouslySetInnerHTML={{__html: htmlHeaderString}} />
+                <Button
+                    component="label"
+                    variant="contained"
+                    tabIndex={-1}
+                    sx={{  }}
+                    >
+                    Upload data
+                    <VisuallyHiddenInput
+                        type="file"
+                        onChange={(e) => onFileUpload(e)}
+                    />
+                </Button>
+            </Box>
+
+            <Divider />
+
+            <Box sx={{ flexGrow: 1, overflowY: 'auto', padding: '2rem' }}>
+                <Dashboard
+                    layout={JSON.parse(urlParams.get('layout'))}
+                    observations={observations}
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                    sliderRange={sliderRange}
+                    setSliderRange={setSliderRange}
+                    dateTimeRange={dateTimeRange}
+                    setDateTimeRange={setDateTimeRange}
+                />
+            </Box>
         </Box>
     )
 }
