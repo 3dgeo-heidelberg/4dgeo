@@ -13,14 +13,31 @@ function DashboardPage() {
 
     const [htmlHeaderString, setHtmlHeaderString] = useState();
 
+    const [typeColors, setTypeColors] = useState(new Map());
 
     const [dateRange, setDateRange] = useState({ startDate: 0, endDate: Date.now()});
     const [sliderRange, setSliderRange] = useState([0, 100]);
-
     const [dateTimeRange, setDateTimeRange] = useState({ startDate: 0, endDate: Date.now()})
 
     async function fetchCustomHeader() {
         setHtmlHeaderString(await (await fetch(`custom/custom_html/dashboard_page_header.html`)).text());
+    }
+
+    const getAllTypesWithColors = (observations) => {
+        const allTypes = new Set();
+        observations.forEach(observation => {
+            observation.geoObjects.forEach(geoObject => {
+                allTypes.add(geoObject.type);
+            });
+        });
+
+        const typeColors = new Map();
+        Array.from(allTypes).map((type) => {
+            const color = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generate a random color
+            typeColors.set(type, color);
+            return 0;
+        });
+        return typeColors;
     }
 
     useEffect(() => {
@@ -32,13 +49,14 @@ function DashboardPage() {
                 setObservations(data.observations);
                 if(isInitialLoad) {
                     resetDashboardState(data.observations);
+                    setTypeColors(getAllTypesWithColors(data.observations));
                 }
             }
         }
         loadData(true);
         fetchCustomHeader();
 
-        const intervalResolution = urlParams.get('interval') == null ? 6 : urlParams.get('interval');
+        const intervalResolution = urlParams.get('interval') == null ? 60 : urlParams.get('interval');
         const interval = setInterval(() => {
             if(!wasFileUploaded) {
                 loadData();
@@ -133,6 +151,7 @@ function DashboardPage() {
                 <Dashboard
                     layout={JSON.parse(urlParams.get('layout'))}
                     observations={observations}
+                    typeColors={typeColors}
                     dateRange={dateRange}
                     setDateRange={setDateRange}
                     sliderRange={sliderRange}
