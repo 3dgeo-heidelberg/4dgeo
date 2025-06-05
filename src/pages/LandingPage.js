@@ -1,44 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, createSearchParams } from 'react-router-dom';
-import { Typography, Snackbar } from '@mui/material';
+import { AppBar, Avatar, Box, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppProvider } from "@toolpad/core/AppProvider";
+
 import './LandingPage.css';
-import DashboardCreation from '../components/dashboard-creation/DashboardCreation';
+import DashboardCreation from "../components/dashboard-creation/DashboardCreation";
+import LandingPageHeader from "../components/LandingPageHeader";
+import { Toolbar } from "react-aria-components";
 
-
-function LandingPage() {
+export default function LandingPage() {
   const navigate = useNavigate();
 
-  const [htmlHeaderString, setHtmlHeaderString] = useState();
   const [exampleDashboards, setExampleDashboards] = useState([]);
 
-  const [showCustom, setShowCustom] = useState(false);
-  const [copyStatus, setCopyStatus] = useState('');
-  const modulesRef = useRef(null);
+  const [layout, setLayout] = useState([]);
+  const [url, setUrl] = useState("");
+  const [interval, setInterval] = useState(0);
 
-  const handleCardSelection = (example) => {
-    navigate({
-      pathname: "/dashboard",
-      search: createSearchParams({
-        layout: JSON.stringify(example.layout),
-        url: example.url,
-        interval: example.interval,
-      }).toString()
-    });
-  };
-
-  const handleDashboardCreationSelection = () => {
-    setShowCustom(true);
-    setTimeout(() => {
-      modulesRef.current.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }, 10);
-  }
 
   async function fetchExampleDashboards() {
     console.log("Fetching example dashboards", window.location.href);
-    const json = await (await fetch(`${window.location.href}/custom/example_dashboards/example_dashboards.json`, {
+    const json = await (await fetch(`custom/example_dashboards/example_dashboards.json`, {
       headers : { 
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -47,73 +29,122 @@ function LandingPage() {
     setExampleDashboards(json.example_dashboards);
   }
 
-  async function fetchHtml() {
-    setHtmlHeaderString(await (await fetch(`${window.location.href}/custom/custom_html/landing_page_header.html`)).text());
-  }
   useEffect(() => {
-    fetchHtml();
     fetchExampleDashboards();
   }, []);
 
+
+  const handleTemplateSelection = (example) => {
+    setLayout(example.layout);
+    setUrl(example.url);
+    setInterval(example.interval);
+
+
+    // navigate({
+    //   pathname: "/dashboard",
+    //   search: new URLSearchParams({
+    //     layout: JSON.stringify(example.layout),
+    //     url: example.url,
+    //     interval: example.interval,
+    //   }).toString()
+    // });
+  };
+
+  const handleDashboardCreationSelection = () => {
+    setLayout([]);
+    setUrl("");
+    setInterval(0);
+  }
+
+  const sideBarContent = [
+    {
+      kind: 'header',
+      title: 'Example Dashboards'
+    }
+  ]
+
+  exampleDashboards.forEach((example) => {
+    sideBarContent.push({
+      segment: example.title,
+      title: example.title,
+    });
+  });
+
+
   return (
-    <div className="dashboard-container">
-      <div className='header'>
-        <div dangerouslySetInnerHTML={{__html: htmlHeaderString}}/>
-      </div>
-      <div className="template-section">
-        <div className="template-header">
-          <Typography variant="h5" component="h2" className="subtitle">
-            Select a template
+    <Box className="landing-page-container">
+      {/* <AppBar className="header" position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div">
+            4DGeo Dashboard
           </Typography>
-        </div>
-
-        <div className="template-container">
-          {Array.from(exampleDashboards).map((example) => {
-            return (
-            <div
-              key={example.title}
-              className="card-wrap"
-              onClick={() => handleCardSelection(example)}
+        </Toolbar>
+      </AppBar> */}
+      <Drawer
+        variant="permanent"
+        className="side-bar"
+        sx={{ width: '15%', minWidth: 250 }}
+      >
+        <Stack className="example-dashboard-list">
+          <List dense>
+            <ListItem>
+              <Avatar className="avatar" src="/4dgeo/3dgeo.ico" alt="4DGeo Logo" />
+              <ListItemText primary="4DGeo Dashboard" />
+            </ListItem>
+          </List>
+          <Divider />
+          <List dense subheader={
+              <ListSubheader component="div" id="subheader-templates">
+                Select a template
+              </ListSubheader>
+            }
+          >
+            {exampleDashboards.map((example, index) => (
+              <ListItem
+                key={index}
+                button
+                onClick={() => handleTemplateSelection(example)}
+                selected={index === 0}
+              >
+                <Avatar variant="square" className="avatar" src={example.image}/>
+                <ListItemText primary={example.title} />
+              </ListItem>
+            ))}
+            <ListItem
+              button
+              onClick={handleDashboardCreationSelection}
             >
-              <div className="card" style={{ backgroundImage: `url(${example.image})` }}>
-                <div className="card-info">
-                  <h1>{example.title}</h1>
-                  <p>{example.description}</p>
-                </div>
-              </div>
-            </div>
-          )})
-          }
-          <div
-              key="custom"
-              className="card-wrap"
-              onClick={() => (handleDashboardCreationSelection())}
-            >
-              <div className="card" style={{ backgroundImage: `url(https://cdn-icons-png.flaticon.com/512/1250/1250615.png)` }}>
-                <div className="card-info">
-                  <h1>Custom Dashboard</h1>
-                  <p>Create a new custom Dashboard</p>
-                </div>
-              </div>
-            </div>
-        </div>
-      </div>
-
-      {showCustom && (
-        <div className='dashboard-creation' ref={modulesRef}>
-          <DashboardCreation />
-        </div>
-      )}
-
-      <Snackbar
-        open={!!copyStatus}
-        autoHideDuration={3000}
-        onClose={() => setCopyStatus('')}
-        message={copyStatus}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      />
-    </div>
-  );
+              <Avatar variant="square" className="avatar" src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png"/>
+              <ListItemText primary="Start from scratch" />
+            </ListItem>
+          </List>
+        </Stack>
+      </Drawer>
+      
+      <Box
+        component={'main'}
+        className="main-content"
+      >
+        <Stack
+          spacing={2}
+          className="content-stack"
+        >
+          <Box className="content-header">
+            <LandingPageHeader />
+          </Box>
+          
+          <Divider />
+          <DashboardCreation
+            className="dashboard-creation"
+            layout={layout}
+            setLayout={setLayout}
+            url={url}
+            setUrl={setUrl}
+            interval={interval}
+            setInterval={setInterval}
+          />
+        </Stack>
+      </Box>
+    </Box>
+  )
 }
-
-export default LandingPage;

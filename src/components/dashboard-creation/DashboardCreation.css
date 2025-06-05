@@ -8,7 +8,7 @@
     max-width: 1200px;
     min-height: 80vh;
     margin: 2rem auto;
-    padding: 2.5rem;
+    padding: 1rem 2.5rem;
     border-radius: 16px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.08);
     background: #f8faff;
@@ -23,7 +23,7 @@
 
 .headline {
     margin: 0;
-    color: var(--purple-500);
+    color: var(--clr-primary-a30);
     font-size: 2.2rem;
     font-weight: 700;
     display: flex;
@@ -39,6 +39,7 @@
 .input-area {
     display: flex;
     gap: 1.2rem;
+    margin-bottom: 1.2rem;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -50,12 +51,12 @@
 }
 
 .MuiInputLabel-root {
-    color: var(--purple-400) !important;
+    color: var(--clr-primary-a20) !important;
     font-weight: 500 !important;
 }
 
 .MuiButton-containedPrimary {
-    background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-400) 100%);
+    background: linear-gradient(135deg, var(--clr-primary-a20) 0%, var(--clr-primary-a40) 100%);
     padding: 0.85rem 2rem;
     border-radius: 10px;
     font-weight: 600;
