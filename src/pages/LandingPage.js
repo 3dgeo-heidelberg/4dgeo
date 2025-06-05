@@ -1,16 +1,11 @@
-import { AppBar, Avatar, Box, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AppProvider } from "@toolpad/core/AppProvider";
 
 import './LandingPage.css';
 import DashboardCreation from "../components/dashboard-creation/DashboardCreation";
 import LandingPageHeader from "../components/LandingPageHeader";
-import { Toolbar } from "react-aria-components";
 
 export default function LandingPage() {
-  const navigate = useNavigate();
-
   const [exampleDashboards, setExampleDashboards] = useState([]);
 
   const [layout, setLayout] = useState([]);

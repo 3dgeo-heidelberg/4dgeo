@@ -87,6 +87,7 @@ function Dashboard({ layout, observations }) {
         Array.from(allTypes).map((type) => {
             const color = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generate a random color
             typeColors.set(type, color);
+            return 0;
         });
         return typeColors;
     }
