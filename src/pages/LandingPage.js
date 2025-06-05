@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Divider, Drawer, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
+import { AppBar, Avatar, Box, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppProvider } from "@toolpad/core/AppProvider";
@@ -93,7 +93,12 @@ export default function LandingPage() {
             </ListItem>
           </List>
           <Divider />
-          <List dense>
+          <List dense subheader={
+              <ListSubheader component="div" id="subheader-templates">
+                Select a template
+              </ListSubheader>
+            }
+          >
             {exampleDashboards.map((example, index) => (
               <ListItem
                 key={index}
@@ -110,7 +115,7 @@ export default function LandingPage() {
               onClick={handleDashboardCreationSelection}
             >
               <Avatar variant="square" className="avatar" src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png"/>
-              <ListItemText primary="Create Custom Dashboard" />
+              <ListItemText primary="Start from scratch" />
             </ListItem>
           </List>
         </Stack>

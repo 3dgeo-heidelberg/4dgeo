@@ -1,4 +1,4 @@
-import { Paper, TextField, Button, Menu, MenuItem } from "@mui/material";
+import { Paper, TextField, Button, Menu, MenuItem, Box } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import DashboardPreview from "./DashboardPreview";
 import { useState } from "react";
@@ -52,6 +52,7 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
         const permaLink = new URL(window.location.origin + '/dashboard', window.location.origin);
         permaLink.searchParams.append("layout", JSON.stringify(layout));
         permaLink.searchParams.append("url", url);
+        permaLink.searchParams.append("interval", interval);
 
         console.log("permalink", permaLink.href);
     }
@@ -62,7 +63,7 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
             search: createSearchParams({
                 layout: JSON.stringify(layout),
                 url: url,
-                interval: 20,
+                interval: interval,
             }).toString()
         })
     }
@@ -71,15 +72,15 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
     return (
         <Paper elevation={3} className="container">
             <div className="header">
-                <h2 className="headline">Create Custom Dashboard</h2>
-                <div className="input-area">
-                    <TextField id="url-input" label="Data Source" variant="outlined" onChange={(event) => {
+                <h2 className="headline">Customize your Dashboard</h2>
+                <Box className="input-area">
+                    <TextField id="url-input" label="Link to your data source" variant="outlined" onChange={(event) => {
                             setUrl(event.target.value);
                         }} 
                         value={url}
                     />
 
-                    <TextField id="interval-input" label="Interval" variant="outlined" type="number" onChange={(event) => {
+                    <TextField id="interval-input" label="Refresh Interval - seconds" variant="outlined" type="number" onChange={(event) => {
                             setInterval(event.target.value);
                         }}
                         value={interval}
@@ -119,7 +120,7 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
                         <MenuItem onClick={handleClose}>DateRangePicker</MenuItem>
                         <MenuItem onClick={handleClose}>Slider</MenuItem>
                     </Menu>
-                </div>
+                </Box>
             </div>
 
             <div className="dashboard-preview">

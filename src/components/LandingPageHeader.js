@@ -1,3 +1,5 @@
+import './LandingPageHeader.css';
+
 export default function LandingPageHeader() {
     return (
         <div className="landing-page-header">
