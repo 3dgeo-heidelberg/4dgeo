@@ -78,12 +78,15 @@ function DashboardPage() {
             endDate: Math.max(...observations.map(observation => Date.parse(observation.startDateTime)))
         }
         setDateRange({startDate: getDateFromDateTime(tempStartEnd.startDate), endDate: addDays(getDateFromDateTime(tempStartEnd.endDate), 1) - 1});
-        setDateTimeRange(tempStartEnd)
 
         const uniqueDateTimes = Array.from(new Set(observations.map(observation => Date.parse(observation.startDateTime))))
 
         if(uniqueDateTimes.length >= 2) {
-            setSliderRange([uniqueDateTimes[0], uniqueDateTimes[uniqueDateTimes.length - 1]])
+            setSliderRange([uniqueDateTimes[uniqueDateTimes.length - 1]])
+            setDateTimeRange({
+                startDate: uniqueDateTimes[uniqueDateTimes.length - 1],
+                endDate: uniqueDateTimes[uniqueDateTimes.length - 1]
+            })
         } else {
             setSliderRange([0, 100])
         }

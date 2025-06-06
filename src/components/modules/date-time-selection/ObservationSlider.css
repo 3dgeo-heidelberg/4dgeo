@@ -1,6 +1,12 @@
+@import url("../../../styles/main_theme.css");
+
 .slider-container {
   width: 100%;
   padding: 5%;
+
+  .observation-slider {
+    color: var(--clr-primary-a30);
+  }
 
   .MuiSlider-markLabel {
     white-space: pre-line;
