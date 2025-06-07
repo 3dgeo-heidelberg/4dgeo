@@ -6,7 +6,14 @@ import 'react-leaflet-markercluster/styles'
 import { useRef } from "react";
 import 'leaflet.markercluster';
 import 'Leaflet.Deflate'
-import { clusterEach } from "@turf/turf";
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+});
 
 
 export default function View2D({ 
@@ -86,9 +93,9 @@ export default function View2D({
             var objectsToCluster = L.markerClusterGroup();
 
 
-            var deflateFeatures = L.deflate({minSize: 20, markerLayer: objectsToCluster});
+            var deflateFeatures = L.deflate({minSize: 5, markerLayer: objectsToCluster, markerType: L.marker});
             deflateFeatures.addTo(clusteredLayer.current);
-            // objectsToCluster.addTo(clusteredLayer.current);
+
             Array.from(observations).map((observation, i) => Array.from(observation.geoObjects).map((geoObject, j) => {
                 switch(geoObject.geometry.type) {
                     case 'Polygon':
@@ -106,10 +113,8 @@ export default function View2D({
                             (geoObject.customEntityData ? Object.entries(geoObject.customEntityData).map((item, i) => {
                                 return "<div key={" + i + "}><b>" + item[0] + ":</b> " + item[1] + "</div>";
                             }) : ""));
-                        // leafletPolygon.addTo(normalLayer.current);
-                        // objectsToCluster.addLayer(leafletPolygon);
+                        leafletPolygon.addTo(normalLayer.current);
                         leafletPolygon.addTo(deflateFeatures);
-                        // leafletPolygon.addTo(layerToDeflate);
                         return;
                     case 'Point':
                         console.log("point")
@@ -129,13 +134,9 @@ export default function View2D({
                             }) : "")
                         ).addTo(normalLayer.current);
                         leafletCircle.addTo(objectsToCluster);
-                        // objectsToCluster.addLayer(leafletCircle);
                         return;
                 }
             }));
-
-            // objectsToCluster.addTo(clusteredLayer.current);
-            // layerToDeflate.addTo(deflatedLayer.current);
             
         }
     };
@@ -165,15 +166,12 @@ export default function View2D({
                 opacity={0.9}
             />
             <LayersControl position="topright">
-                <LayersControl.Overlay checked name="Clustered geoobjects">
+                <LayersControl.BaseLayer checked name="Clustered geoobjects">
                     <LayerGroup ref={clusteredLayer} />
-                </LayersControl.Overlay>
-                <LayersControl.Overlay name="Nonclustered geoobjects">
+                </LayersControl.BaseLayer>
+                <LayersControl.BaseLayer name="Nonclustered geoobjects">
                     <LayerGroup ref={normalLayer} />
-                </LayersControl.Overlay>
-                {/* <LayersControl.Overlay name="Deflated geoobjects">
-                    <LayerGroup ref={deflatedLayer} />
-                </LayersControl.Overlay> */}
+                </LayersControl.BaseLayer>
             </LayersControl>
         </MapContainer>
     ) : (
