@@ -132,7 +132,7 @@ function DashboardPage() {
 
     return (
         <Box className="dashboard-container" sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem 4rem'}}>
+            <Box sx={{ display: 'flex', maxHeight: '5%', justifyContent: 'space-between', alignItems: 'center', padding: '2rem 4rem'}}>
                 <div className="custom-header" dangerouslySetInnerHTML={{__html: htmlHeaderString}} />
                 <Button
                     component="label"
