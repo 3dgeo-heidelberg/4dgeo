@@ -1,10 +1,13 @@
-import { Paper, TextField, Button, Menu, MenuItem, Box } from "@mui/material";
+import { Paper, TextField, Button, Menu, MenuItem, Box, Snackbar } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import DashboardPreview from "./DashboardPreview";
 import { useState } from "react";
 
 import './DashboardCreation.css';
 import { useNavigate, createSearchParams } from "react-router-dom";
+import { fetchJsonData } from "../../utils/http_fetcher";
+import ColorAssignment from "./ColorAssignment";
 
 const minimumModuleSizes = new Map([
     ["Chart", {w: 2, h: 2}],
@@ -17,7 +20,9 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
     const navigate = useNavigate();
     // const [layout, setLayout] = useState([])
     const [counterForKey, setCounterForKey] = useState(0)
-    // const [url, setUrl] = useState("")
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const [typeColors, setTypeColors] = useState(new Map());
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -28,6 +33,24 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
         addModuleToLayout(event.currentTarget.firstChild.textContent)
         setAnchorEl(null);
     };
+
+    const preloadTypes = async () => {
+        const data = await fetchJsonData(url);
+
+        if(data !== null && data.observations) {
+            const types = new Set();
+            data.observations.forEach(observation => {
+                observation.geoObjects.forEach(geoObject => {
+                    types.add(geoObject.type);
+                });
+            });
+
+            const typeColors = new Map();
+            types.forEach((type) => typeColors.set(type, `#${Math.floor(Math.random()*16777215).toString(16)}`))
+
+            setTypeColors(typeColors);
+        }
+    }
 
     const addModuleToLayout = (moduleName) => {
         if (moduleName === "2D View") {
@@ -55,8 +78,11 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
         permaLink.searchParams.append("layout", JSON.stringify(layout));
         permaLink.searchParams.append("url", url);
         permaLink.searchParams.append("interval", interval);
+        console.log("typeColors", JSON.stringify([...typeColors]))
+        permaLink.searchParams.append("typeColors", JSON.stringify([...typeColors]))
 
-        console.log("permalink", permaLink.href);
+        navigator.clipboard.writeText(permaLink);
+        setSnackbarOpen(true);
     }
 
     const handleGo = () => {
@@ -66,11 +92,12 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
                 layout: JSON.stringify(layout),
                 url: url,
                 interval: interval,
+                typeColors: JSON.stringify([...typeColors])
             }).toString()
         })
     }
 
-
+    console.log("reload")
     return (
         <Paper elevation={3} className="container">
             <div className="header">
@@ -82,11 +109,17 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
                         value={url}
                     />
 
-                    <TextField id="interval-input" label="Refresh Interval - seconds" variant="outlined" type="number" onChange={(event) => {
-                            setInterval(event.target.value);
-                        }}
-                        value={interval}
-                    />
+                    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "1.2rem"}}>
+                        <TextField id="interval-input" label="Refresh Interval - seconds" variant="outlined" type="number" onChange={(event) => {
+                                setInterval(event.target.value);
+                            }}
+                            value={interval}
+                        />
+
+                        <ColorAssignment typeColors={typeColors} setTypeColors={setTypeColors} preloadTypes={preloadTypes} />
+                    </Box>
+                    
+
                     
                     <Button 
                         id="moduleSelectButton"
@@ -97,8 +130,8 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
                         aria-controls={open ? 'demo-positioned-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined} 
-                    >
-                        <AddIcon/>
+                        startIcon={<AddIcon/>}
+                    >                        
                         Add Module
                     </Button>
 
@@ -139,9 +172,16 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
                     color="primary" 
                     variant="contained" 
                     onClick={handlePermalink}
+                    startIcon={<ContentCopyIcon/>}
                 >
-                    Permalink   
+                    Permalink  
                 </Button>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={5000}
+                    onClose={() => {setSnackbarOpen(false)}}
+                    message={"Permalink copied to your clipboard"}
+                />
 
                 <Button 
                     id=""

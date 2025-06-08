@@ -54,7 +54,7 @@ export default function View2D({
         }
     }
 
-    const getEventGeometries = () => {
+    const getGeoObjectGeometries = () => {
         return Array.from(observations).map((observation, i) => Array.from(observation.geoObjects).map((geoObject, j) => {
             switch(geoObject.geometry.type) {
                 case 'Polygon':
@@ -129,7 +129,7 @@ export default function View2D({
         })).flat();
     };
 
-    let geoObjectGeometries = getEventGeometries();
+    let geoObjectGeometries = getGeoObjectGeometries();
 
     return backgroundImageData ? (
         <MapContainer
