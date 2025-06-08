@@ -66,7 +66,7 @@ function DashboardPage() {
                         setTypeColors(completeTypeColors(urlTypeColors, data.observations));
                     }
                 } else {
-                    setTypeColors(typeColors, data.observations)
+                    setTypeColors(completeTypeColors(typeColors, data.observations))
                 }
             }
         }
