@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, ListSubheader, selectClasses, Stack } from "@mui/material";
+import { Avatar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, ListSubheader, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import './LandingPage.css';
