@@ -87,7 +87,6 @@ export default function Chart({ observations, typeColors }) {
                             <Tooltip />
                             <Legend />
                             {Array.from(typeColors).map(([type, color]) => {
-                                console.log("type", type, "color", color);
                                 return <Bar key={type.toString()} dataKey={type.toString()} stackId={"a"} fill={color} />
                             })}
                             <Brush dataKey="name" height={30} stroke="#8884d8" />

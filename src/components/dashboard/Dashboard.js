@@ -17,11 +17,9 @@ function Dashboard({ layout, observations, typeColors, dateRange, setDateRange, 
     }
 
     const resetSliderRange = (includedDateTimes) => {
-        if(includedDateTimes.length >= 2) {
-            setSliderRange([includedDateTimes[0], includedDateTimes[includedDateTimes.length - 1]])
-        } else {
-            setSliderRange([0, 100])
-        }
+        const newSliderRange = [includedDateTimes[includedDateTimes.length - 1]];
+        setSliderRange(newSliderRange);
+        return newSliderRange;
     }
 
     const handleDateRangeSelected = (newDateRange) => {  
@@ -29,11 +27,14 @@ function Dashboard({ layout, observations, typeColors, dateRange, setDateRange, 
         setDateRange(newDateRange);    
         let newFilteredObservations = filterObservations(newDateRange.startDate, newDateRange.endDate);
 
-        resetSliderRange(Array.from(new Set(newFilteredObservations.map(observation => Date.parse(observation.startDateTime)))));
+        const newSliderRange = resetSliderRange(Array.from(new Set(newFilteredObservations.map(observation => Date.parse(observation.startDateTime)))));
 
-        setDateTimeRange({
-            startDate: newDateRange.startDate,
-            endDate: newDateRange.endDate
+        setDateTimeRange(newSliderRange.length === 1 ? {
+            startDate: newSliderRange[0],
+            endDate: newSliderRange[0]
+        } : {
+            startDate: newSliderRange[0],
+            endDate: newSliderRange[1]
         });
     }
 
@@ -41,10 +42,17 @@ function Dashboard({ layout, observations, typeColors, dateRange, setDateRange, 
     const handleSliderRangeSelected = (newSliderRange) => {
         setSliderRange(newSliderRange);
 
-        setDateTimeRange({
-            startDate: newSliderRange[0],
-            endDate: newSliderRange[1]
-        });
+        if(newSliderRange.length === 1) {
+            setDateTimeRange({
+                startDate: newSliderRange[0],
+                endDate: newSliderRange[0]
+            });
+        } else {
+            setDateTimeRange({
+                startDate: newSliderRange[0],
+                endDate: newSliderRange[1]
+            });
+        }
     }
 
     const generateDOM = () => {
