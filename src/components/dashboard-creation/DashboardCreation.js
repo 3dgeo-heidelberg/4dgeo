@@ -12,13 +12,12 @@ import ColorAssignment from "./ColorAssignment";
 const minimumModuleSizes = new Map([
     ["Chart", {w: 2, h: 2}],
     ["View2D", {w: 4, h: 2}],
-    ["DateRangePicker", {w: 3, h: 1}],
+    ["DateRangePicker", {w: 2, h: 1}],
     ["Slider", {w: 2, h: 1}]
   ])
 
 function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterval }) {
     const navigate = useNavigate();
-    // const [layout, setLayout] = useState([])
     const [counterForKey, setCounterForKey] = useState(0)
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -65,7 +64,6 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
             minW: minimumModuleSizes.get(moduleName).w,
             minH: minimumModuleSizes.get(moduleName).h,
         }));
-        console.log("Adding module", moduleName, "to layout", layout);
         setCounterForKey(counterForKey + 1);
     }
     
@@ -78,7 +76,6 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
         permaLink.searchParams.append("layout", JSON.stringify(layout));
         permaLink.searchParams.append("url", url);
         permaLink.searchParams.append("interval", interval);
-        console.log("typeColors", JSON.stringify([...typeColors]))
         permaLink.searchParams.append("typeColors", JSON.stringify([...typeColors]))
 
         navigator.clipboard.writeText(permaLink);

@@ -7,7 +7,6 @@ import { Button, Divider, styled } from "@mui/material";
 import { addDays } from "date-fns";
 import ColorAssignment from "../components/dashboard-creation/ColorAssignment";
 import AddIcon from '@mui/icons-material/Add'
-import { CopticCalendar } from "@internationalized/date";
 
 function DashboardPage() {
     const urlParams = useSearchParams()[0]
@@ -39,7 +38,6 @@ function DashboardPage() {
 
     const completeTypeColors = (typeColors, observations) => {
         const allTypes = getAllTypes(observations);
-        const test = new Map();
         allTypes.forEach(type => {
             if(!typeColors.has(type)) {
                 typeColors.set(type, `#${Math.floor(Math.random()*16777215).toString(16)}`);
@@ -82,7 +80,8 @@ function DashboardPage() {
         }, Number.parseInt(intervalResolution)*1000);
 
         return () => clearInterval(interval);
-    }, [urlParams]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const getDateFromDateTime = (dateTime) => {
         let date = new Date(dateTime);
@@ -122,7 +121,7 @@ function DashboardPage() {
                     setWasFileUploaded(true);
 
                     resetDashboardState(jsonData.observations);
-                    console.log("Data loaded from file:", jsonData.observations);
+                    setTypeColors(completeTypeColors(new Map(), jsonData.observations));
                 } else {
                     console.error("Invalid data format");
                 }

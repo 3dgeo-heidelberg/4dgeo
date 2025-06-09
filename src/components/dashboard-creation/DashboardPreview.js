@@ -33,7 +33,6 @@ function DashboardPreview({ layout, onLayoutChange, minimumModuleSizes }) {
         const width = window.innerWidth;
         const height = window.innerHeight - (window.innerHeight*0.05 - 2*(parseFloat(getComputedStyle(document.documentElement).fontSize)));
 
-        console.log(width, height)
         return width/height;
     }
 

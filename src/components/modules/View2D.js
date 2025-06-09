@@ -1,9 +1,9 @@
-import { MapContainer, ImageOverlay, LayersControl, Polygon, Rectangle, Circle, LayerGroup, Tooltip, useMap, useMapEvent } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
-import L, { layerGroup } from "leaflet"; // Import Leaflet library to access its utility methods
+import { MapContainer, ImageOverlay, LayersControl, LayerGroup } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
+import L from "leaflet"; // Import Leaflet library to access its utility methods
 
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/styles'
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import 'leaflet.markercluster';
 import 'Leaflet.Deflate'
 
@@ -51,6 +51,7 @@ export default function View2D({
         try {
         const decoded = atob(str);
         // crude check: should be reasonably long and contain binary-like characters
+        // eslint-disable-next-line no-control-regex
         return decoded.length > 100 && /[\x00-\x08\x0E-\x1F]/.test(decoded.slice(0, 100));
         } catch {
         return false;
@@ -83,8 +84,7 @@ export default function View2D({
         setLatLng: function () {}
     })
 
-    const getGeoObjectGeometries = (origin) => {
-        console.log("called from: ", origin);
+    const getGeoObjectGeometries = () => {
         if (clusteredLayer.current && normalLayer.current) {
             clusteredLayer.current.clearLayers();
             normalLayer.current.clearLayers();
@@ -94,7 +94,7 @@ export default function View2D({
             var deflateFeatures = L.deflate({minSize: 5, markerLayer: objectsToCluster, markerType: L.marker});
             deflateFeatures.addTo(clusteredLayer.current);
 
-            Array.from(observations).map((observation, i) => Array.from(observation.geoObjects).map((geoObject, j) => {
+            Array.from(observations).forEach((observation) => Array.from(observation.geoObjects).forEach((geoObject) => {
                 switch(geoObject.geometry.type) {
                     case 'Polygon':
                         const leafletPolygon = new L.polygonClusterable(
@@ -149,12 +149,14 @@ export default function View2D({
                         ).addTo(normalLayer.current)
                         leafletRectangle.addTo(clusteredLayer.current);
                         return;
+                    default:
+                        return;
                 }
             }));
         }
     };
 
-    getGeoObjectGeometries("normal/needed rerender");
+    getGeoObjectGeometries();
 
     return backgroundImageData ? (
         <MapContainer
@@ -179,7 +181,7 @@ export default function View2D({
                     <LayerGroup ref={clusteredLayer}
                         eventHandlers={{
                             add: () => {
-                                getGeoObjectGeometries("clustered Layer added");
+                                getGeoObjectGeometries();
                             }
                         }} 
                     />
@@ -188,7 +190,7 @@ export default function View2D({
                     <LayerGroup ref={normalLayer}
                         eventHandlers={{
                             add: () => {
-                                getGeoObjectGeometries("normal Layer added");
+                                getGeoObjectGeometries();
                             }
                         }} 
                     />
