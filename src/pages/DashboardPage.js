@@ -36,52 +36,58 @@ function DashboardPage() {
         return allTypes;
     }
 
-    const completeTypeColors = (typeColors, observations) => {
+    const completeTypeColors = (inputTypeColors, observations) => {
         const allTypes = getAllTypes(observations);
-        allTypes.forEach(type => {
-            if(!typeColors.has(type)) {
-                typeColors.set(type, `#${Math.floor(Math.random()*16777215).toString(16)}`);
+        const newTypeColorsList = new Map();
+        allTypes.forEach((type) => {
+            if(!inputTypeColors.has(type)) {
+                newTypeColorsList.set(type, `#${Math.floor(Math.random()*16777215).toString(16)}`);
+            } else {
+                newTypeColorsList.set(type, inputTypeColors.get(type));
             }
         });
 
-        return typeColors;
+        return newTypeColorsList;
+    }
+
+    const loadData = async (isInitialLoad = false) => {
+        const data = await fetchJsonData(urlParams.get('url'));
+        if (data == null) {
+            setObservations([]);
+        } else {
+            if(isInitialLoad) {
+                resetDashboardState(data.observations);
+                
+                const urlTypeColors = new Map(Array.from(JSON.parse(urlParams.get('typeColors'))));
+                const completedTypeColors = completeTypeColors(urlTypeColors, data.observations);
+                setTypeColors(completedTypeColors);
+            } else {
+                setTypeColors(oldTypeColors => {
+                    const completedTypeColors = completeTypeColors(oldTypeColors, data.observations);
+                    return completedTypeColors;
+                })
+            }
+            setObservations(data.observations);
+        }
     }
 
     useEffect(() => {
-        async function loadData(isInitialLoad = false) {
-            const data = await fetchJsonData(urlParams.get('url'));
-            if (data == null) {
-                setObservations([]);
-            } else {
-                setObservations(data.observations);
-                if(isInitialLoad) {
-                    resetDashboardState(data.observations);
-                    const typeColors = urlParams.get('typeColors');
-                    if(!typeColors) {
-                        setTypeColors(completeTypeColors(new Map(), data.observations));
-                    } else {
-                        const urlTypeColors = new Map(Array.from(JSON.parse(typeColors)));
-                        setTypeColors(completeTypeColors(urlTypeColors, data.observations));
-                    }
-                } else {
-                    setTypeColors(completeTypeColors(typeColors, data.observations))
+        if(!wasFileUploaded) {
+            loadData(true);
+            fetchCustomHeader();
+
+            const intervalResolution = urlParams.get('interval') == null ? 60 : urlParams.get('interval');
+            const interval = setInterval(() => {
+                if(!wasFileUploaded) {
+                    loadData(false);
+                    console.log("Reloading data!");
                 }
-            }
+            }, Number.parseInt(intervalResolution)*1000);
+
+            return () => clearInterval(interval);
         }
-        loadData(true);
-        fetchCustomHeader();
-
-        const intervalResolution = urlParams.get('interval') == null ? 60 : urlParams.get('interval');
-        const interval = setInterval(() => {
-            if(!wasFileUploaded) {
-                loadData();
-                console.log("Reloading data!");
-            }
-        }, Number.parseInt(intervalResolution)*1000);
-
-        return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [wasFileUploaded]);
 
     const getDateFromDateTime = (dateTime) => {
         let date = new Date(dateTime);

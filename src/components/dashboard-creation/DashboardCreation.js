@@ -94,7 +94,6 @@ function DashboardCreation({ layout, setLayout, url, setUrl, interval, setInterv
         })
     }
 
-    console.log("reload")
     return (
         <Paper elevation={3} className="container">
             <div className="header">
