@@ -6,7 +6,6 @@ import { Box, Stack, Switch } from '@mui/material';
 export default function ObservationSlider({ includedDateTimes, sliderRange, handleSliderRangeChange }) {
 
     const handleSwitchChange = (event) => {
-        console.log("old Slider Range", sliderRange, "Switch new checked status:", event.target.checked);
         if (event.target.checked) {
             // Switch to range mode
             const indexOfCurrentRange = includedDateTimes.findIndex(dateTime => dateTime.getTime() === sliderRange[0]);
@@ -32,9 +31,8 @@ export default function ObservationSlider({ includedDateTimes, sliderRange, hand
                 </Stack>
             </Box>
             <Slider
-                getAriaValueText={(dateTime, index) => {
+                getAriaValueText={(dateTime) => {
                     let dateObj = new Date(dateTime)
-                    console.log("date", dateObj.toLocaleDateString() + "\n" + dateObj.toLocaleTimeString())
                     return dateObj.toLocaleDateString() + "\n" + dateObj.toLocaleTimeString();
                 }}
                 step={null}

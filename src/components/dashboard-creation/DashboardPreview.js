@@ -2,6 +2,7 @@ import React from "react";
 import "./DashboardPreview.css";
 
 import { Responsive, WidthProvider } from "react-grid-layout";
+import { Box } from "@mui/material";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -28,9 +29,17 @@ function DashboardPreview({ layout, onLayoutChange, minimumModuleSizes }) {
         })
     }
 
+    const getAspectRatioOfScreen = () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight - (window.innerHeight*0.05 - 2*(parseFloat(getComputedStyle(document.documentElement).fontSize)));
+
+        return width/height;
+    }
+
+    const aspectRatio = getAspectRatioOfScreen();
 
     return (
-        <div className="layout-container">
+        <Box className="layout-container" sx={{aspectRatio: aspectRatio}}>
             <ResponsiveGridLayout
                 layout={layout}
                 onLayoutChange={onLayoutChange}
@@ -38,7 +47,7 @@ function DashboardPreview({ layout, onLayoutChange, minimumModuleSizes }) {
             >
                 {generateDOM()}
             </ResponsiveGridLayout>
-        </div>
+        </Box>
     );
 };
 

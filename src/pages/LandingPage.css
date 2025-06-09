@@ -3,9 +3,6 @@
   display: flex;
 
   .side-bar {
-    width: 15%;
-    min-width: 200px;
-
     & > * {
       width: inherit;
       min-width: inherit;

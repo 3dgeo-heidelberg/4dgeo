@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Stack } from "@mui/material";
+import { Avatar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, ListSubheader, selectClasses, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import './LandingPage.css';
@@ -7,10 +7,30 @@ import LandingPageHeader from "../components/LandingPageHeader";
 
 export default function LandingPage() {
   const [exampleDashboards, setExampleDashboards] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(1);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [drawerIsClosing, setDrawerIsClosing] = useState(false);
+  const drawerWidth = 250;
 
   const [layout, setLayout] = useState([]);
   const [url, setUrl] = useState("");
   const [interval, setInterval] = useState(0);
+
+
+  const handleDrawerClose = () => {
+    setDrawerIsClosing(true);
+    setMobileDrawerOpen(false);
+  };
+
+  const handleDrawerTransitionEnd = () => {
+    setDrawerIsClosing(false);
+  };
+
+  const handleDrawerToggle = () => {
+    if (!drawerIsClosing) {
+      setMobileDrawerOpen(!mobileDrawerOpen);
+    }
+  };
 
 
   async function fetchExampleDashboards() {
@@ -33,16 +53,6 @@ export default function LandingPage() {
     setLayout(example.layout);
     setUrl(example.url);
     setInterval(example.interval);
-
-
-    // navigate({
-    //   pathname: "/dashboard",
-    //   search: new URLSearchParams({
-    //     layout: JSON.stringify(example.layout),
-    //     url: example.url,
-    //     interval: example.interval,
-    //   }).toString()
-    // });
   };
 
   const handleDashboardCreationSelection = () => {
@@ -66,55 +76,91 @@ export default function LandingPage() {
   });
 
 
+  const drawer = (
+    <Stack className="example-dashboard-list">
+      <List dense>
+        <ListItem>
+          <Avatar className="avatar" src="/4dgeo/3dgeo.ico" alt="4DGeo Logo" />
+          <ListItemText primary="4DGeo Dashboard" />
+        </ListItem>
+      </List>
+      <Divider />
+      <List dense subheader={
+          <ListSubheader component="div" id="subheader-templates">
+            Select a template
+          </ListSubheader>
+        }
+      >
+        {exampleDashboards.map((example, index) => (
+          <ListItemButton
+            key={index}
+            selected={selectedTemplate === index}
+            onClick={() => {
+              handleTemplateSelection(example);
+              setSelectedTemplate(index)
+            }}
+          >
+            <Avatar variant="square" className="avatar" src={example.image}/>
+            <ListItemText primary={example.title} />
+          </ListItemButton>
+        ))}
+        <ListItemButton
+          selected={selectedTemplate === exampleDashboards.length}
+          onClick={() => {
+            handleDashboardCreationSelection();
+            setSelectedTemplate(exampleDashboards.length);
+          }}
+        >
+          <Avatar variant="square" className="avatar" src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png"/>
+          <ListItemText primary="Start from scratch" />
+        </ListItemButton>
+      </List>
+    </Stack>
+  )
+
+
   return (
     <Box className="landing-page-container">
-      {/* <AppBar className="header" position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            4DGeo Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
-      <Drawer
+      {/* <Drawer
         variant="permanent"
         className="side-bar"
         sx={{ width: '15%', minWidth: 250 }}
       >
-        <Stack className="example-dashboard-list">
-          <List dense>
-            <ListItem>
-              <Avatar className="avatar" src="/4dgeo/3dgeo.ico" alt="4DGeo Logo" />
-              <ListItemText primary="4DGeo Dashboard" />
-            </ListItem>
-          </List>
-          <Divider />
-          <List dense subheader={
-              <ListSubheader component="div" id="subheader-templates">
-                Select a template
-              </ListSubheader>
-            }
-          >
-            {exampleDashboards.map((example, index) => (
-              <ListItem
-                key={index}
-                button
-                onClick={() => handleTemplateSelection(example)}
-                selected={index === 0}
-              >
-                <Avatar variant="square" className="avatar" src={example.image}/>
-                <ListItemText primary={example.title} />
-              </ListItem>
-            ))}
-            <ListItem
-              button
-              onClick={handleDashboardCreationSelection}
-            >
-              <Avatar variant="square" className="avatar" src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png"/>
-              <ListItemText primary="Start from scratch" />
-            </ListItem>
-          </List>
-        </Stack>
-      </Drawer>
+        
+      </Drawer> */}
+      <Box>
+        <Drawer
+          variant="temporary"
+          open={mobileDrawerOpen}
+          onTransitionEnd={handleDrawerTransitionEnd}
+          onClose={handleDrawerClose}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            width: drawerWidth,
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+          }}
+          className="side-bar"
+          slotProps={{
+            root: {
+              keepMounted: true, // Better open performance on mobile.
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            width: drawerWidth,
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+          className="side-bar"
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
       
       <Box
         component={'main'}
@@ -125,7 +171,7 @@ export default function LandingPage() {
           className="content-stack"
         >
           <Box className="content-header">
-            <LandingPageHeader />
+            <LandingPageHeader handleDrawerToggle={handleDrawerToggle} />
           </Box>
           
           <Divider />
