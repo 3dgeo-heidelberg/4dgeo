@@ -83,30 +83,13 @@ export default function View2D({
         setLatLng: function () {}
     })
 
-    L.polygonClusterable = L.Polygon.extend({
-        _originalInitialize: L.Polygon.prototype.initialize,
-
-        initialize: function (bounds, options) {
-            this._originalInitialize(bounds, options);
-            this._latlng = this.getBounds().getCenter(); // Define the polygon "center".
-        },
-
-        getLatLng: function () {
-            return this._latlng;
-        },
-
-        // dummy method.
-        setLatLng: function () {}
-    })
-
     const getGeoObjectGeometries = (origin) => {
-        console.log("called by:", origin);
+        console.log("called from: ", origin);
         if (clusteredLayer.current && normalLayer.current) {
             clusteredLayer.current.clearLayers();
             normalLayer.current.clearLayers();
             
             var objectsToCluster = L.markerClusterGroup();
-
 
             var deflateFeatures = L.deflate({minSize: 5, markerLayer: objectsToCluster, markerType: L.marker});
             deflateFeatures.addTo(clusteredLayer.current);
@@ -148,9 +131,26 @@ export default function View2D({
                         ).addTo(normalLayer.current);
                         leafletCircle.addTo(objectsToCluster);
                         return;
+                    case 'Rectangle':
+                        const leafletRectangle = L.rectangle(
+                            geoObject.geometry.coordinates, {
+                                color: typeColors.get(geoObject.type) || "black",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 0.65,
+                                radius: 4,
+                                crs: L.CRS.Simple
+                            }
+                        ).bindTooltip(
+                            `<b>Type:</b> ${geoObject.type}<br>` +
+                            (geoObject.customEntityData ? Object.entries(geoObject.customEntityData).map((item, i) => {
+                                return "<div key={" + i + "}><b>" + item[0] + ":</b> " + item[1] + "</div>";
+                            }) : "")
+                        ).addTo(normalLayer.current)
+                        leafletRectangle.addTo(clusteredLayer.current);
+                        return;
                 }
             }));
-            
         }
     };
 
