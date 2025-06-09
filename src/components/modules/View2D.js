@@ -54,7 +54,7 @@ export default function View2D({
         }
     }
 
-    const getEventGeometries = () => {
+    const getGeoObjectGeometries = () => {
         return Array.from(observations).map((observation, i) => Array.from(observation.geoObjects).map((geoObject, j) => {
             switch(geoObject.geometry.type) {
                 case 'Polygon':
@@ -65,7 +65,7 @@ export default function View2D({
                         <Polygon
                             key={`${i}-${j}`} 
                             pathOptions={{ 
-                                color: 'purple',
+                                color: typeColors.get(geoObject.type) || "black",
                                 weight: 2,
                                 opacity: 1,
                                 fillOpacity: 0.65
@@ -87,10 +87,15 @@ export default function View2D({
                     return (
                         <Circle 
                             key={`${i}-${j}`}
-                            color={"purple"}
-                            weight={1} // Line thickness
-                            opacity={1} // Line opacity
-                            fillOpacity={0.65} // Fill opacity
+                            pathOptions={{
+                                color: typeColors.get(geoObject.type) ? typeColors.get(geoObject.type) : "black",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 0.65,
+                            }}
+                            weight={1}
+                            opacity={1}
+                            fillOpacity={0.65}
                             center={geoObject.geometry.coordinates[0]}
                             radius={4}                            
                             crs={L.CRS.Simple}
@@ -110,10 +115,10 @@ export default function View2D({
                         <Rectangle
                             key={`${i}-${j}`}
                             pathOptions={{ 
-                                color: typeColors.get(geoObject.type),
-                                weight: 2, // Line thickness
-                                opacity: 1, // Line opacity
-                                fillOpacity: 0.5, // Fill opacity
+                                color: typeColors.get(geoObject.type) || "black",
+                                weight: 2,
+                                opacity: 1,
+                                fillOpacity: 0.5,
                             }}
                             positions={geoObject.geometry.coordinates}
                         />
@@ -124,7 +129,7 @@ export default function View2D({
         })).flat();
     };
 
-    let geoObjectGeometries = getEventGeometries();
+    let geoObjectGeometries = getGeoObjectGeometries();
 
     return backgroundImageData ? (
         <MapContainer

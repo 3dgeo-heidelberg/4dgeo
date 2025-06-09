@@ -8,7 +8,7 @@ import Chart from "../modules/Chart";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-function Dashboard({ layout, observations, dateRange, setDateRange, sliderRange, setSliderRange, dateTimeRange, setDateTimeRange }) {
+function Dashboard({ layout, observations, typeColors, dateRange, setDateRange, sliderRange, setSliderRange, dateTimeRange, setDateTimeRange }) {
 
     const filterObservations = (startDate, endDate) => {
         return Array.from(observations).filter((observation) => {
@@ -46,27 +46,6 @@ function Dashboard({ layout, observations, dateRange, setDateRange, sliderRange,
             endDate: newSliderRange[1]
         });
     }
-
-    const getAllTypesWithColors = () => {
-        const allTypes = new Set();
-        observations.forEach(observation => {
-            observation.geoObjects.forEach(geoObject => {
-                allTypes.add(geoObject.type);
-            });
-        });
-
-        const typeColors = new Map();
-        Array.from(allTypes).map((type) => {
-            const color = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generate a random color
-            typeColors.set(type, color);
-            return 0;
-        });
-        return typeColors;
-    }
-
-    const typeColors = getAllTypesWithColors();
-
-
 
     const generateDOM = () => {
         return Array.from(layout).map((layoutItem, i) => {
@@ -163,7 +142,7 @@ function Dashboard({ layout, observations, dateRange, setDateRange, sliderRange,
                            <MapView
                                 className="mapview"
                                 observations={filterObservations(dateTimeRange.startDate, dateTimeRange.endDate)}
-                                typeColors={new Map()}
+                                typeColors={typeColors}
                             />
                         </div>
                     );
