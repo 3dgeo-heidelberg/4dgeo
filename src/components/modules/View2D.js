@@ -84,7 +84,23 @@ export default function View2D({
         setLatLng: function () {}
     })
 
-    const getEventGeometries = () => {
+    L.polygonClusterable = L.Polygon.extend({
+        _originalInitialize: L.Polygon.prototype.initialize,
+
+        initialize: function (bounds, options) {
+            this._originalInitialize(bounds, options);
+            this._latlng = this.getBounds().getCenter(); // Define the polygon "center".
+        },
+
+        getLatLng: function () {
+            return this._latlng;
+        },
+
+        // dummy method.
+        setLatLng: function () {}
+    })
+
+    const getGeoObjectGeometries = () => {
         if (clusteredLayer.current && normalLayer.current) {
             clusteredLayer.current.clearLayers();
             normalLayer.current.clearLayers();
@@ -142,7 +158,7 @@ export default function View2D({
     };
 
     if(clusteredLayer.current && normalLayer.current) {
-        getEventGeometries();
+        getGeoObjectGeometries();
     }
     
 
