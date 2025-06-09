@@ -1,9 +1,9 @@
-import { MapContainer, ImageOverlay, LayersControl, Polygon, Rectangle, Circle, LayerGroup, Tooltip } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
+import { MapContainer, ImageOverlay, LayersControl, Polygon, Rectangle, Circle, LayerGroup, Tooltip, useMap, useMapEvent } from "react-leaflet"; // Import Leaflet components for rendering the map and layers
 import L, { layerGroup } from "leaflet"; // Import Leaflet library to access its utility methods
 
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/styles'
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import 'leaflet.markercluster';
 import 'Leaflet.Deflate'
 
@@ -22,7 +22,6 @@ export default function View2D({
  }) {
     const clusteredLayer = useRef(null);
     const normalLayer = useRef(null);
-    const deflatedLayer = useRef(null);
 
     let backgroundImageData = null;
     if(observations.find(observation => observation.backgroundImageData)) {
@@ -100,12 +99,12 @@ export default function View2D({
         setLatLng: function () {}
     })
 
-    const getGeoObjectGeometries = () => {
+    const getGeoObjectGeometries = (origin) => {
+        console.log("called by:", origin);
         if (clusteredLayer.current && normalLayer.current) {
             clusteredLayer.current.clearLayers();
             normalLayer.current.clearLayers();
             
-            console.log("rendering: ", observations)
             var objectsToCluster = L.markerClusterGroup();
 
 
@@ -115,7 +114,6 @@ export default function View2D({
             Array.from(observations).map((observation, i) => Array.from(observation.geoObjects).map((geoObject, j) => {
                 switch(geoObject.geometry.type) {
                     case 'Polygon':
-                        console.log("Polygon")
                         const leafletPolygon = new L.polygonClusterable(
                             geoObject.geometry.coordinates, {
                                 color: typeColors.get(geoObject.type) || "black",
@@ -133,7 +131,6 @@ export default function View2D({
                         leafletPolygon.addTo(deflateFeatures);
                         return;
                     case 'Point':
-                        console.log("point")
                         const leafletCircle = L.circle(
                             geoObject.geometry.coordinates[0], {
                                 color: typeColors.get(geoObject.type) || "black",
@@ -157,10 +154,7 @@ export default function View2D({
         }
     };
 
-    if(clusteredLayer.current && normalLayer.current) {
-        getGeoObjectGeometries();
-    }
-    
+    getGeoObjectGeometries("normal/needed rerender");
 
     return backgroundImageData ? (
         <MapContainer
@@ -172,7 +166,6 @@ export default function View2D({
             zoom={-2}
             scrollWheelZoom={true}
         >
-            {/* <MapEventHandlers onMoveEnd={updateMap}/> */}
             <ImageOverlay
                 url={getImageSrc(backgroundImageData.url)}
                 bounds={
@@ -183,10 +176,22 @@ export default function View2D({
             />
             <LayersControl position="topright">
                 <LayersControl.BaseLayer checked name="Clustered geoobjects">
-                    <LayerGroup ref={clusteredLayer} />
+                    <LayerGroup ref={clusteredLayer}
+                        eventHandlers={{
+                            add: () => {
+                                getGeoObjectGeometries("clustered Layer added");
+                            }
+                        }} 
+                    />
                 </LayersControl.BaseLayer>
                 <LayersControl.BaseLayer name="Nonclustered geoobjects">
-                    <LayerGroup ref={normalLayer} />
+                    <LayerGroup ref={normalLayer}
+                        eventHandlers={{
+                            add: () => {
+                                getGeoObjectGeometries("normal Layer added");
+                            }
+                        }} 
+                    />
                 </LayersControl.BaseLayer>
             </LayersControl>
         </MapContainer>
